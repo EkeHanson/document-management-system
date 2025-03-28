@@ -30,12 +30,44 @@ import { DocumentContext } from '../../contexts/DocumentContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import TransmittalStatusBadge from '../../components/transmittals/TransmittalStatusBadge';
-import { formatDate, formatDateTime, formatDateForTable } from '../../utils/dateUtils';
 
 const { Search } = Input;
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
+
+// Date formatting utilities (previously in dateUtils.js)
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
+const formatDateTime = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  return date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
+const formatDateForTable = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+};
 
 const TransmittalList = () => {
   const { currentProject } = useContext(AuthContext);
