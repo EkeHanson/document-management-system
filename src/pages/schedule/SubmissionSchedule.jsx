@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiCalendar, FiFilter, FiDownload, FiPlus } from 'react-icons/fi';
-import { useProjectContext } from '../../contexts/ProjectContext';
+// import { useProjectContext } from '../../contexts/ProjectContext';
 import ScheduleTable from './ScheduleTable';
 import ScheduleFilter from './ScheduleFilter';
 import AddScheduleItemModal from './AddScheduleItemModal';
@@ -8,7 +8,7 @@ import AddScheduleItemModal from './AddScheduleItemModal';
 import Loader from '../../components/common/Loader';
 
 const SubmissionSchedule = () => {
-  const { currentProject, fetchProjectSchedule } = useProjectContext();
+  //const { currentProject, fetchProjectSchedule } = useProjectContext();
   const [scheduleItems, setScheduleItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ const SubmissionSchedule = () => {
 
   useEffect(() => {
     const loadSchedule = async () => {
-      if (currentProject) {
+      if ("currentProject") {
         const items = await fetchProjectSchedule(currentProject.id);
         setScheduleItems(items);
         setFilteredItems(items);
@@ -30,7 +30,8 @@ const SubmissionSchedule = () => {
       }
     };
     loadSchedule();
-  }, [currentProject, fetchProjectSchedule]);
+   }, []);
+  // }, [currentProject, fetchProjectSchedule]);
 
   useEffect(() => {
     applyFilters();

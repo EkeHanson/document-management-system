@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaSearch, FaFilter, FaFileAlt, FaDownload, FaHistory, FaEdit } from 'react-icons/fa';
+import { 
+  FaSearch, 
+  FaFilter, 
+  FaFileAlt, 
+  FaDownload, 
+  FaHistory, 
+  FaEdit 
+} from 'react-icons/fa';
 import { useDocuments } from '../../hooks/useDocuments';
 import './Documents.css';
 
@@ -13,10 +20,17 @@ const DocumentList = () => {
     dateRange: 'all'
   });
 
-  const filteredDocuments = documents.filter(doc => {
+  // Safely handle documents data
+  const documentData = Array.isArray(documents) ? documents : [];
+  
+  const filteredDocuments = documentData.filter(doc => {
+    // Check if doc exists and has required properties
+    if (!doc) return false;
+    
     // Search filter
-    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = 
+      (doc.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      (doc.description?.toLowerCase().includes(searchTerm.toLowerCase())));
     
     // Status filter
     const matchesStatus = filters.status === 'all' || doc.status === filters.status;
@@ -96,25 +110,42 @@ const DocumentList = () => {
               <div className="table-cell">
                 <FaFileAlt className="file-icon" />
                 <Link to={`/documents/${doc.id}`} className="document-name">
-                  {doc.name}
+                  {doc.name || 'Untitled Document'}
                 </Link>
               </div>
               <div className="table-cell">
-                <span className={`file-type ${doc.type}`}>{doc.type.toUpperCase()}</span>
+                <span className={`file-type ${doc.type}`}>
+                  {doc.type?.toUpperCase() || 'N/A'}
+                </span>
               </div>
               <div className="table-cell">
-                <span className={`status-badge ${doc.status}`}>{doc.status}</span>
+                <span className={`status-badge ${doc.status}`}>
+                  {doc.status || 'Unknown'}
+                </span>
               </div>
-              <div className="table-cell">{doc.modifiedDate}</div>
-              <div className="table-cell">v{doc.version}</div>
+              <div className="table-cell">
+                {doc.modifiedDate || 'N/A'}
+              </div>
+              <div className="table-cell">
+                {doc.version ? `v${doc.version}` : 'N/A'}
+              </div>
               <div className="table-cell actions">
-                <Link to={`/documents/${doc.id}/download`} className="action-button download">
+                <Link 
+                  to={`/documents/${doc.id}/download`} 
+                  className="action-button download"
+                >
                   <FaDownload />
                 </Link>
-                <Link to={`/documents/${doc.id}/history`} className="action-button history">
+                <Link 
+                  to={`/documents/${doc.id}/history`} 
+                  className="action-button history"
+                >
                   <FaHistory />
                 </Link>
-                <Link to={`/documents/${doc.id}/edit`} className="action-button edit">
+                <Link 
+                  to={`/documents/${doc.id}/edit`} 
+                  className="action-button edit"
+                >
                   <FaEdit />
                 </Link>
               </div>
@@ -122,7 +153,9 @@ const DocumentList = () => {
           ))
         ) : (
           <div className="no-documents">
-            No documents found matching your criteria
+            {documentData.length === 0 ? 
+              'No documents available' : 
+              'No documents found matching your criteria'}
           </div>
         )}
       </div>
