@@ -1,0 +1,115 @@
+/* Add these new styles for the direct implementation */
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .stat-icon {
+    font-size: 1.75rem;
+    padding: 1rem;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  .stat-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #7f8c8d;
+    font-weight: 500;
+  }
+  
+  .stat-value {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  
+  .stat-trend {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
+  
+  /* Documents List Styles */
+  .data-section {
+    margin-top: 2rem;
+  }
+  
+  .data-section h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+  
+  .documents-list, .deadlines-list {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+  }
+  
+  .document-item, .deadline-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .document-item:last-child, .deadline-item:last-child {
+    border-bottom: none;
+  }
+  
+  .document-icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: #4b6cb7;
+  }
+  
+  .document-info h3, .deadline-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .document-info p, .deadline-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
+  
+  .status-badge {
+    margin-left: auto;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .status-badge.approved {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .status-badge.pending {
+    background: #fff8e1;
+    color: #ff8f00;
+  }
+  
+  .status-badge.in-review {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  
+  .days-badge {
+    margin-left: auto;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: #ffebee;
+    color: #c62828;
+  }

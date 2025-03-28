@@ -1,0 +1,24 @@
+/* src/components/schedule/AddScheduleItemModal.module.css */
+.form {
+    padding: 1rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .formRow {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .formRow .formGroup {
+    flex: 1;
+  }
+  
+  .formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }

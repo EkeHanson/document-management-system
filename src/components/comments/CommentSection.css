@@ -1,0 +1,32 @@
+/* src/components/comments/CommentSection.css */
+.comment-section {
+    margin-top: 24px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 16px;
+  }
+  
+  .comment-title {
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  
+  .comment-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+  }
+  
+  .comment-author {
+    font-weight: 500;
+    margin-right: 8px;
+  }
+  
+  .comment-time {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 0.85em;
+  }
+  
+  .ant-list-item {
+    padding-left: 0;
+    padding-right: 0;
+  }

@@ -1,0 +1,52 @@
+.document-selector {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.search-bar .search-input {
+  flex-grow: 1;
+}
+
+.document-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.document-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.document-item.selected {
+  border-color: #1890ff;
+  background-color: #f0f9ff;
+}
+
+.document-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+  }
+  
+  .document-list {
+    grid-template-columns: 1fr;
+  }
+}

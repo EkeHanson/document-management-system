@@ -1,0 +1,68 @@
+/* src/components/common/StatusBadge.css */
+:root {
+    --status-approved: #4caf50;
+    --status-pending: #ffc107;
+    --status-rejected: #f44336;
+    --status-under-review: #2196f3;
+    --status-overdue: #ff5722;
+    --status-draft: #9e9e9e;
+    --status-default: #607d8b;
+  }
+  
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 12px;
+    padding: 2px 8px;
+    color: white;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  
+  .status-badge.small {
+    font-size: 0.75rem;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+  
+  .status-badge.medium {
+    font-size: 0.875rem;
+  }
+  
+  .status-badge.large {
+    font-size: 1rem;
+    padding: 4px 10px;
+  }
+  
+  .status-icon {
+    margin-right: 4px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .status-text {
+    text-transform: capitalize;
+  }
+
+  .custom-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding: 10px 0;
+  }
+  
+  .custom-pagination .ant-pagination-options {
+    margin-left: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .custom-pagination {
+      justify-content: center;
+    }
+    
+    .ant-pagination-options {
+      display: none;
+    }
+  }

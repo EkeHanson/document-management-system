@@ -1,0 +1,88 @@
+/* src/components/common/Tabs.css */
+.tabs-container {
+    width: 100%;
+  }
+  
+  .tabs-header {
+    display: flex;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 16px;
+  }
+  
+  .tabs-centered .tabs-header {
+    justify-content: center;
+  }
+  
+  .tab-button {
+    padding: 8px 16px;
+    margin-right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    position: relative;
+  }
+  
+  .tab-button:after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #1890ff;
+    transition: width 0.3s;
+  }
+  
+  .tab-button.active:after {
+    width: 100%;
+  }
+  
+  .tab-button.active {
+    color: #1890ff;
+  }
+  
+  .tab-button:hover:not(.disabled):not(.active) {
+    color: #40a9ff;
+  }
+  
+  .tab-button.disabled {
+    color: rgba(0, 0, 0, 0.25);
+    cursor: not-allowed;
+  }
+  
+  .tabs-card .tabs-header {
+    border-bottom: none;
+  }
+  
+  .tabs-card .tab-button {
+    border: 1px solid #d9d9d9;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    background: #fafafa;
+  }
+  
+  .tabs-card .tab-button.active {
+    background: #fff;
+    border-bottom: 1px solid #fff;
+  }
+  
+  .tab-icon {
+    margin-right: 8px;
+  }
+  
+  /* Size variations */
+  .tabs-small .tab-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .tabs-large .tab-button {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+  
+  .tabs-content {
+    padding: 8px 0;
+  }

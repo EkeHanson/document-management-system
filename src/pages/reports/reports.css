@@ -1,0 +1,49 @@
+/* Common styles for all report components */
+.report-controls {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .stats-overview {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .stats-overview .ant-card {
+    flex: 1;
+  }
+  
+  /* Status Reports specific styles */
+  .status-reports .ant-table {
+    margin-top: 24px;
+  }
+  
+  /* Audit Trail specific styles */
+  .audit-trail-report .ant-table {
+    margin-top: 16px;
+  }
+  
+  /* Progress Reports specific styles */
+  .progress-reports .ant-card {
+    margin-bottom: 24px;
+  }
+  
+  .progress-reports .ant-progress-line {
+    margin-bottom: 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .report-controls {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .stats-overview {
+      flex-direction: column;
+    }
+  }

@@ -1,0 +1,221 @@
+/* Auth Container Styles */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .auth-bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../../assets/images/auth-bg.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 0.1;
+    z-index: 0;
+  }
+  
+  /* Auth Card Styles */
+  .auth-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    z-index: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .auth-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+  }
+  
+  .auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .auth-logo {
+    height: 60px;
+    margin-bottom: 20px;
+  }
+  
+  .auth-header h1 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  .auth-header p {
+    color: #7f8c8d;
+    font-size: 14px;
+  }
+  
+  /* Form Styles */
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    font-size: 14px;
+    color: #2c3e50;
+    font-weight: 500;
+  }
+  
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 15px;
+    color: #7f8c8d;
+    font-size: 16px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s;
+  }
+  
+  .input-group input:focus {
+    border-color: #4b6cb7;
+    box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.1);
+    outline: none;
+  }
+  
+  .password-toggle {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  /* Form Options */
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .remember-me input {
+    accent-color: #4b6cb7;
+  }
+  
+  .forgot-password {
+    color: #4b6cb7;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .forgot-password:hover {
+    text-decoration: underline;
+  }
+  
+  /* Button Styles */
+  .auth-button {
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .auth-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  
+  .auth-button:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* Footer Styles */
+  .auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #7f8c8d;
+  }
+  
+  .auth-link {
+    color: #4b6cb7;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .auth-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Error/Success Messages */
+  .auth-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border: 1px solid #f5c6cb;
+  }
+  
+  .auth-success {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .success-icon {
+    color: #28a745;
+    font-size: 50px;
+    margin-bottom: 15px;
+  }
+  
+  .auth-success p {
+    margin-bottom: 10px;
+    color: #2c3e50;
+  }
