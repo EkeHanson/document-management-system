@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCloudUploadAlt, FaHistory, FaLock, FaSearch, FaUsers, FaFilePdf, FaFileExcel, FaFileWord, FaFileImage, FaFileArchive } from 'react-icons/fa';
 import { MdDashboard, MdEngineering, MdOutlineWaterDrop } from 'react-icons/md';
 import { BsFillCalendarCheckFill } from 'react-icons/bs';
+import './LandingPage.css'; // We'll create this CSS file
 
 const LandingPage = () => {
   const navigate = useNavigate();

@@ -43,6 +43,8 @@ import RoleManagement from './pages/admin/RoleManagement.jsx'
 import SystemSettings from './pages/admin/SystemSettings.jsx'
 
 
+import LandingPage from './pages/landing/LandingPage.jsx'
+
 import Error404 from './pages/Error404.jsx'
 
 // Protected Route Component
@@ -79,7 +81,8 @@ const App = () => {
           {/* Protected Main Application Routes */}
           <Route element={<ProtectedRoute />}>
             {/* Dashboard */}
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/overview" element={<Overview />} />
             <Route path="/notifications" element={<Notifications />} />
 

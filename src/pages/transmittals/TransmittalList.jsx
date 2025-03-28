@@ -30,6 +30,7 @@ import { DocumentContext } from '../../contexts/DocumentContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import TransmittalStatusBadge from '../../components/transmittals/TransmittalStatusBadge';
+import { formatDate, formatDateTime, formatDateForTable } from '../../utils/dateUtils';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -55,12 +56,10 @@ const TransmittalList = () => {
   useEffect(() => {
     let filtered = [...transmittals];
     
-    // Apply tab filter
     if (activeTab !== 'all') {
       filtered = filtered.filter(transmittal => transmittal.status === activeTab);
     }
     
-    // Apply search filter
     if (searchText) {
       filtered = filtered.filter(transmittal => 
         transmittal.transmittalNumber.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -69,7 +68,6 @@ const TransmittalList = () => {
       );
     }
     
-    // Apply date range filter
     if (dateRange.length === 2) {
       filtered = filtered.filter(transmittal => {
         const transmittalDate = new Date(transmittal.date);
@@ -87,7 +85,6 @@ const TransmittalList = () => {
 
   const handleExport = (format) => {
     message.success(`Transmittals exported as ${format.toUpperCase()} successfully`);
-    // In a real implementation, this would trigger the export API call
   };
 
   const columns = [
@@ -107,7 +104,7 @@ const TransmittalList = () => {
       dataIndex: 'date',
       key: 'date',
       sorter: (a, b) => new Date(a.date) - new Date(b.date),
-      render: (text) => new Date(text).toLocaleDateString(),
+      render: (text) => formatDateForTable(text),
     },
     {
       title: 'Subject',
@@ -120,6 +117,7 @@ const TransmittalList = () => {
       dataIndex: 'recipient',
       key: 'recipient',
       sorter: (a, b) => a.recipient.localeCompare(b.recipient),
+      render: (text) => text || 'N/A',
     },
     {
       title: 'Status',
