@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaFileAlt, FaRegClock, FaCheckCircle, FaTimesCircle, FaPlus } from 'react-icons/fa';
 import { Table, Tag, Button, Input, Space, Tooltip } from 'antd';
-import { formatDate } from '../../utils/dateUtils';
 import './TransmittalList.css';
 
 const TransmittalList = ({ transmittals, loading }) => {
@@ -13,6 +12,20 @@ const TransmittalList = ({ transmittals, loading }) => {
   useEffect(() => {
     setFilteredTransmittals(transmittals);
   }, [transmittals]);
+
+  // Date formatting function moved inside the component
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    
+    const options = { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
 
   const handleSearch = (value) => {
     setSearchText(value);

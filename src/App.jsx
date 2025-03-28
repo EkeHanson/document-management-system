@@ -44,9 +44,9 @@ const ProtectedRoute = ({ requiredRoles = [] }) => {
     return <Loader fullScreen />;
   }
 
-  if (!currentUser) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!currentUser) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   if (requiredRoles.length > 0 && !requiredRoles.includes(currentUser.role)) {
     return <Navigate to="/unauthorized" replace />;
