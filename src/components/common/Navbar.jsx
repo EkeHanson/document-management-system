@@ -13,13 +13,13 @@ import {
   FaFileUpload,
   FaFileDownload,
   FaHistory,
-  FaUsersCog
+  FaUsersCog,
+  FaBars,
+  FaTimes
 } from 'react-icons/fa';
-// import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
 
-const Navbar = () => {
- // const { currentUser, logout } = useAuth();
+const Navbar = ({ onSidebarToggle, isSidebarCollapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,7 +32,7 @@ const Navbar = () => {
   }, [location]);
 
   const handleLogout = () => {
-    logout();
+    // logout();
     navigate('/login');
   };
 
@@ -52,7 +52,6 @@ const Navbar = () => {
     { path: '/reports', icon: <FaFileDownload />, label: 'Reports' }
   ];
 
-  // const adminNavItems = currentUser?.role === 'admin' ? [
   const adminNavItems = "currentUser" ? [
     { path: '/admin/users', icon: <FaUsersCog />, label: 'Users' },
     { path: '/admin/settings', icon: <FaCog />, label: 'Settings' }
@@ -61,6 +60,15 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
+        {/* Sidebar Toggle Button */}
+        <button 
+          className="sidebar-toggle"
+          onClick={onSidebarToggle}
+          aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {isSidebarCollapsed ? <FaBars /> : <FaTimes />}
+        </button>
+
         {/* Brand Logo */}
         <Link to="/" className="navbar-brand">
           <FaRegFileAlt className="brand-icon" />
@@ -71,6 +79,8 @@ const Navbar = () => {
         <button 
           className="mobile-menu-toggle"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-expanded={isMobileMenuOpen}
+          aria-label="Toggle mobile menu"
         >
           <span className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}></span>
         </button>
@@ -85,6 +95,7 @@ const Navbar = () => {
               placeholder="Search documents, projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search documents and projects"
             />
           </form>
 
@@ -95,6 +106,7 @@ const Navbar = () => {
                 <Link 
                   to={item.path} 
                   className={`navbar-link ${activePath.startsWith(item.path) ? 'active' : ''}`}
+                  aria-current={activePath.startsWith(item.path) ? "page" : undefined}
                 >
                   <span className="nav-icon">{item.icon}</span>
                   <span className="nav-label">{item.label}</span>
@@ -107,7 +119,10 @@ const Navbar = () => {
         {/* User Controls */}
         <div className="navbar-controls">
           {/* Notifications */}
-          <button className="notification-btn">
+          <button 
+            className="notification-btn"
+            aria-label="Notifications"
+          >
             <FaBell />
             <span className="notification-badge">3</span>
           </button>
@@ -117,11 +132,12 @@ const Navbar = () => {
             <button 
               className="profile-btn"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
+              aria-expanded={isProfileOpen}
+              aria-label="User profile menu"
             >
               <FaUserCircle className="profile-icon" />
               <span className="profile-name">
-                { 'User'}
-                {/* {currentUser?.name || 'User'} */}
+                {'User'}
                 <FaChevronDown className={`dropdown-arrow ${isProfileOpen ? 'open' : ''}`} />
               </span>
             </button>
@@ -131,8 +147,8 @@ const Navbar = () => {
                 <div className="dropdown-header">
                   <FaUserCircle className="user-icon" />
                   <div>
-                    <div className="user-name">{currentUser?.name || 'User'}</div>
-                    <div className="user-role">{currentUser?.role || 'Guest'}</div>
+                    <div className="user-name">User</div>
+                    <div className="user-role">Guest</div>
                   </div>
                 </div>
                 <div className="dropdown-divider"></div>

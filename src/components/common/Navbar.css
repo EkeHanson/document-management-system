@@ -10,12 +10,31 @@
 }
 
 .navbar-container {
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: #4a5568;
+  font-size: 1.25rem;
+  cursor: pointer;
+  margin-right: 1.5rem;
+  padding: 0.5rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle:hover {
+  color: #4299e1;
 }
 
 /* Brand Styles */
@@ -26,7 +45,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: #2d3748;
-  margin-right: 2rem;
+  margin-right: auto;
 }
 
 .brand-icon {
@@ -47,6 +66,7 @@
   display: flex;
   flex-grow: 1;
   align-items: center;
+  margin-left: 2rem;
 }
 
 .navbar-search {
@@ -412,5 +432,9 @@
   
   .dropdown-menu {
     min-width: 200px;
+  }
+  
+  .sidebar-toggle {
+    margin-right: 0.5rem;
   }
 }
