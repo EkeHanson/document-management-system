@@ -20,10 +20,11 @@ import {
   SaveOutlined, 
   CloseOutlined,
   FileExcelOutlined,
-  FilePdfOutlined
+  FilePdfOutlined,
+  ImportOutlined // Add this line
 } from '@ant-design/icons';
-//import { DocumentContext } from '../../contexts/DocumentContext';
-// import { AuthContext } from '../../contexts/AuthContext';
+import  DocumentContext from '../../contexts/DocumentContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import DCITemplateDownload from './DCITemplateDownload';
 
@@ -33,8 +34,8 @@ const { Dragger } = Upload;
 
 const DCIUploadImport = () => {
   const [form] = Form.useForm();
-  // const { currentProject, currentUser } = useContext(AuthContext);
-  //const { importDCI, uploadDCI, loading } = useContext(DocumentContext);
+  const { currentProject, currentUser } = useContext(AuthContext);
+  const { importDCI, uploadDCI, loading } = useContext(DocumentContext);
   const [activeTab, setActiveTab] = useState('manual');
   const [fileList, setFileList] = useState([]);
   const [previewData, setPreviewData] = useState([]);

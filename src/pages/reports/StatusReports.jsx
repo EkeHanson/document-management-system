@@ -28,7 +28,7 @@ const StatusReports = () => {
 
   const filterData = () => {
     setLoading(true);
-    let data = [...documents];
+    let data = Array.isArray(documents) ? [...documents] : [];
     
     // Apply date range filter
     if (dateRange && dateRange.length === 2) {
@@ -93,8 +93,8 @@ const StatusReports = () => {
   };
 
   const exportToPDF = () => {
-    // Implementation for PDF export would go here
     console.log('Exporting to PDF...');
+    // PDF export logic here
   };
 
   return (
@@ -116,7 +116,7 @@ const StatusReports = () => {
           onChange={setSelectedProject}
           allowClear
         >
-          {projects.map(project => (
+          {Array.isArray(projects) && projects.map(project => (
             <Option key={project._id} value={project._id}>{project.name}</Option>
           ))}
         </Select>
@@ -142,7 +142,7 @@ const StatusReports = () => {
         <Card>
           <Statistic 
             title="Active Projects" 
-            value={projects.length} 
+            value={Array.isArray(projects) ? projects.length : 0} 
             prefix={<TeamOutlined />} 
           />
         </Card>

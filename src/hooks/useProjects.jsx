@@ -10,11 +10,16 @@ const useProjects = () => {
     try {
       setLoading(true);
       const response = await api.get('/projects');
-      setProjects(response.data);
+      console.log('Projects API response:', response.data); // Debug log
+      
+      // Ensure projects is always an array
+      const projectsData = Array.isArray(response.data) ? response.data : [];
+      setProjects(projectsData);
       setError(null);
     } catch (err) {
       setError(err.message);
       console.error('Failed to fetch projects:', err);
+      setProjects([]); // Reset to empty array on error
     } finally {
       setLoading(false);
     }
@@ -61,20 +66,21 @@ const useProjects = () => {
     }
   };
 
-  // Filter active projects
-  const activeProjects = projects.filter(project => project.status === 'active');
+  // Filter active projects (only if projects is an array)
+  const activeProjects = Array.isArray(projects) 
+    ? projects.filter(project => project.status === 'active') 
+    : [];
 
   return {
     projects,
     activeProjects,
     loading,
     error,
-    fetchProjects, // Add this to the returned object
+    fetchProjects,
     addProject,
     updateProject,
     deleteProject
   };
 };
 
-// Named export
 export { useProjects };

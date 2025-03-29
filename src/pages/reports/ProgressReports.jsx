@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useProjects } from '../../hooks/useProjects';
 import { useDocuments } from '../../hooks/useDocuments';
-import { Card, Select, DatePicker, Button, Table, Progress, Row, Col } from 'antd';
+import { Card, Select, DatePicker, Button, Table, Progress, Row, Col, Tag } from 'antd';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { FileExcelOutlined, CalendarOutlined } from '@ant-design/icons';
 import './reports.css';

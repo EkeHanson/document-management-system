@@ -6,21 +6,21 @@ const useDocuments = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get('/documents');
-        setDocuments(response.data);
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-        console.error('Failed to fetch documents:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchDocuments = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/documents');
+      setDocuments(response.data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error('Failed to fetch documents:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchDocuments();
   }, []);
 
@@ -65,11 +65,12 @@ const useDocuments = () => {
     documents,
     loading,
     error,
+    fetchDocuments, // Add this to the returned object
     addDocument,
     updateDocument,
     deleteDocument
   };
 };
 
-// Make sure to use named export
+// Named export
 export { useDocuments };
