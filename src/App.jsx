@@ -39,6 +39,17 @@ import SystemSettings from './pages/admin/SystemSettings';
 import LandingPage from './pages/landing/LandingPage';
 import Error404 from './pages/Error404';
 
+import AboutUs from './components/common/AboutUs'
+import ContactUs from './components/common/ContactUs'
+import Terms from './components/common/Terms'
+import Privacy from './components/common/Privacy'
+import Security from './components/common/Security'
+import Documentation from './components/common/Documentation'
+import Cooky from './components/common/Cooky'
+import Webinars from './components/common/Webinars'
+import Compliance from './components/common/Compliance'
+import Careers from './components/common/Careers'
+
 import { DocumentProvider } from './contexts/DocumentContext';
 
 // Protected Route Component
@@ -85,6 +96,15 @@ const App = () => {
             <Route element={<PublicRoute />}>
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/security" element={<Security />} />
+              <Route path="/docs" element={<Documentation />} />
+              <Route path="/webinars" element={<Webinars />} />
+              <Route path="/cookies" element={<Cooky />} />
+              <Route path="/compliance" element={<Compliance />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
             </Route>
           </Route>
