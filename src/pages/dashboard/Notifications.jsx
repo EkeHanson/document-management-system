@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaBell, FaCheck, FaTrash, FaExclamationCircle, FaInfoCircle, FaCheckCircle } from 'react-icons/fa';
 import './Notifications.css';
 
@@ -102,7 +102,7 @@ const NotificationsCenter = () => {
         </h2>
         <div className="notification-actions">
           <button className="mark-all-read" onClick={markAllAsRead}>
-            Mark all as read
+            <FaCheck size={12} /> Mark all as read
           </button>
           <div className="filter-buttons">
             <button

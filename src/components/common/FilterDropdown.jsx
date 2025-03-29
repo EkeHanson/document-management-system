@@ -9,8 +9,8 @@ import {
 import PropTypes from 'prop-types';
 
 const FilterDropdown = ({
-  filters,
-  selectedFilters,
+  filters = [],  // Default value here as additional safeguard
+  selectedFilters = {},
   onFilterChange,
   placeholder = "Filter items",
   disabled = false
@@ -44,29 +44,32 @@ const FilterDropdown = ({
         />
       </div>
       
-      {filters.map(filter => (
-        <Menu.ItemGroup key={filter.key} title={filter.label}>
-          {filter.options
-            .filter(option => 
-              option.label.toLowerCase().includes(searchText.toLowerCase()) ||
-              option.value.toLowerCase().includes(searchText.toLowerCase())
-            )
-            .map(option => (
-              <Menu.Item 
-                key={`${filter.key}-${option.value}`}
-                onClick={() => handleMenuClick(filter.key, option.value)}
-              >
-                <Space>
-                  {selectedFilters[filter.key]?.includes(option.value) ? (
-                    <CheckOutlined style={{ color: '#1890ff' }} />
-                  ) : null}
-                  {option.label}
-                </Space>
-              </Menu.Item>
-            ))}
-        </Menu.ItemGroup>
-      ))}
-      
+      {filters.length > 0 ? (
+        filters.map(filter => (
+          <Menu.ItemGroup key={filter.key} title={filter.label}>
+            {filter.options
+              ?.filter(option => 
+                option?.label?.toLowerCase().includes(searchText.toLowerCase()) ||
+                option?.value?.toString().toLowerCase().includes(searchText.toLowerCase())
+              )
+              ?.map(option => (
+                <Menu.Item 
+                  key={`${filter.key}-${option.value}`}
+                  onClick={() => handleMenuClick(filter.key, option.value)}
+                >
+                  <Space>
+                    {selectedFilters[filter.key]?.includes(option.value) ? (
+                      <CheckOutlined style={{ color: '#1890ff' }} />
+                    ) : null}
+                    {option.label}
+                  </Space>
+                </Menu.Item>
+              ))}
+          </Menu.ItemGroup>
+        ))
+      ) : (
+        <Menu.Item disabled>No filters available</Menu.Item>
+      )}
       <Menu.Divider />
       <Menu.Item 
         key="clear-all" 

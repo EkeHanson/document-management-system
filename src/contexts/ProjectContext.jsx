@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-// import { useAuthContext } from './AuthContext';
+import  {useAuthContext}  from './AuthContext';  // Change useAuth to useAuthContext
 import projectService from '../services/projectService';
 
 // Create context
@@ -7,7 +7,7 @@ const ProjectContext = createContext();
 
 // Context provider component
 export const ProjectProvider = ({ children }) => {
-  //const { user } = useAuthContext();
+  const { user } = useAuthContext();  // Instead of useAuthContext()
   const [projects, setProjects] = useState([]);
   const [currentProject, setCurrentProject] = useState(null);
   const [loading, setLoading] = useState(false);

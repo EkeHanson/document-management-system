@@ -1,4 +1,3 @@
-// src/components/common/Pagination.jsx
 import React from 'react';
 import { Pagination as AntPagination } from 'antd';
 import PropTypes from 'prop-types';
@@ -13,10 +12,11 @@ const Pagination = ({
   showQuickJumper = false,
   showTotal = true,
   disabled = false,
-  simple = false
+  simple = false,
+  className = ''
 }) => {
   return (
-    <div className="custom-pagination">
+    <div className={`custom-pagination ${className}`}>
       <AntPagination
         current={current}
         total={total}
@@ -44,7 +44,8 @@ Pagination.propTypes = {
   showQuickJumper: PropTypes.bool,
   showTotal: PropTypes.bool,
   disabled: PropTypes.bool,
-  simple: PropTypes.bool
+  simple: PropTypes.bool,
+  className: PropTypes.string
 };
 
 export default Pagination;

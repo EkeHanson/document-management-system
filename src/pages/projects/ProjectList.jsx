@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-// import { ProjectContext } from '../../contexts/ProjectContext';
-// import { AuthContext } from '../../contexts/AuthContext';
+import ProjectContext from '../../contexts/ProjectContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import Loader from '../../components/common/Loader';
 import SearchBar from '../../components/common/UserSearch';
 import FilterDropdown from '../../components/common/FilterDropdown';
@@ -9,8 +9,8 @@ import Pagination from '../../components/common/Pagination';
 import EmptyState from '../../components/common/EmptyState';
 
 const ProjectList = () => {
-  // const { projects, loading, fetchProjects } = useContext(ProjectContext);
-  // const { user } = useContext(AuthContext);
+  const { projects, loading, fetchProjects } = useContext(ProjectContext);
+  const { user } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [projectsPerPage] = useState(10);
@@ -21,9 +21,9 @@ const ProjectList = () => {
   }, []);
 
   // Filter projects based on search term and status
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         project.code.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredProjects = (Array.isArray(projects) ? projects : []).filter(project => {
+    const matchesSearch = project.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         project.code?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -35,7 +35,7 @@ const ProjectList = () => {
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  if (loading) return <Loader />;
+  if (loading || !Array.isArray(projects)) return <Loader />;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -134,10 +134,10 @@ const ProjectList = () => {
         )}
 
         <Pagination
-          itemsPerPage={projectsPerPage}
-          totalItems={filteredProjects.length}
-          currentPage={currentPage}
-          paginate={paginate}
+          current={currentPage}
+          total={filteredProjects.length}
+          pageSize={projectsPerPage}
+          onChange={paginate}
           className="mt-6"
         />
       </div>

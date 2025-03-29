@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-//import { DocumentContext } from '../../contexts/DocumentContext';
-// import { AuthContext } from '../../contexts/AuthContext';
-// import { useDocuments } from '../../hooks/useDocuments';
+import { DocumentContext } from '../../contexts/DocumentContext';
+import { AuthContext } from '../../contexts/AuthContext';
+import { useDocuments } from '../../hooks/useDocuments';
 import { Table, Button, Input, Select, Tag, Space, message, Card } from 'antd';
 import { SearchOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import DrawingFilter from '../../components/drawings/DrawingFilter';
@@ -12,8 +12,8 @@ const { Search } = Input;
 const { Option } = Select;
 
 const DrawingList = () => {
-  // const { currentProject } = useContext(AuthContext);
-  //const { drawings, loading, error, fetchDrawings } = useContext(DocumentContext);
+  const { currentProject } = useContext(AuthContext);
+  const { drawings, loading, error, fetchDrawings } = useContext(DocumentContext);
   const [filteredDrawings, setFilteredDrawings] = useState([]);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [searchText, setSearchText] = useState('');

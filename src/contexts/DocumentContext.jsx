@@ -80,3 +80,5 @@ export const useDocumentContext = () => {
   }
   return context;
 };
+
+export { DocumentContext };

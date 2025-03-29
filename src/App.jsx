@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+
+import { ProjectProvider } from './contexts/ProjectContext';
+
+import { AuthProvider, useAuthContext } from './contexts/AuthContext';
 import Loader from './components/common/Loader';
 import Layout from './components/common/Layout'; // New layout component
 import PublicLayout from './components/common/PublicLayout'; // New public layout
@@ -38,7 +41,7 @@ import Error404 from './pages/Error404';
 
 // Protected Route Component
 const ProtectedRoute = ({ requiredRoles = [] }) => {
-  const { currentUser, loading } = useAuth();
+  const { currentUser, loading } = useAuthContext();
 
   if (loading) {
     return <Loader fullScreen />;
@@ -57,7 +60,7 @@ const ProtectedRoute = ({ requiredRoles = [] }) => {
 
 // Public Route Component (for landing page and auth)
 const PublicRoute = () => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuthContext();
   
   if (currentUser) {
     return <Navigate to="/dashboard" replace />;
@@ -68,8 +71,10 @@ const PublicRoute = () => {
 
 const App = () => {
   return (
+   
     <Router>
       <AuthProvider>
+      <ProjectProvider>
         <Routes>
           {/* Public Routes - Landing Page and Authentication */}
           <Route element={<PublicLayout />}>
@@ -148,8 +153,10 @@ const App = () => {
           <Route path="/unauthorized" element={<Error404 unauthorized />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
+        </ProjectProvider>
       </AuthProvider>
     </Router>
+    
   );
 };
 

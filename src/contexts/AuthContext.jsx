@@ -2,8 +2,10 @@ import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 
-const AuthContext = createContext();
+// Create and export the context as a named export
+export const AuthContext = createContext();
 
+// Provider component
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,7 +45,9 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth() {
+// Custom hook for consuming the context
+export function useAuthContext() {
+  
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');

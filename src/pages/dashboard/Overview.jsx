@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDocuments } from '../../hooks/useDocuments';
 import { useProjects } from '../../hooks/useProjects';
 import { FaFileAlt, FaProjectDiagram, FaClock, FaCalendarAlt, FaSearch } from 'react-icons/fa';
@@ -57,7 +57,7 @@ const Overview = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">
-            <FaFileAlt size={24} />
+            <FaFileAlt />
           </div>
           <div className="stat-content">
             <h3>Total Documents</h3>
@@ -67,7 +67,7 @@ const Overview = () => {
 
         <div className="stat-card">
           <div className="stat-icon">
-            <FaProjectDiagram size={24} />
+            <FaProjectDiagram />
           </div>
           <div className="stat-content">
             <h3>Active Projects</h3>
@@ -77,7 +77,7 @@ const Overview = () => {
 
         <div className="stat-card">
           <div className="stat-icon">
-            <FaClock size={24} />
+            <FaClock />
           </div>
           <div className="stat-content">
             <h3>Pending Reviews</h3>
@@ -87,7 +87,7 @@ const Overview = () => {
 
         <div className="stat-card">
           <div className="stat-icon">
-            <FaCalendarAlt size={24} />
+            <FaCalendarAlt />
           </div>
           <div className="stat-content">
             <h3>Upcoming Deadlines</h3>
@@ -101,13 +101,30 @@ const Overview = () => {
         <h2>Monthly Activity</h2>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="name" stroke="#7f8c8d" />
+            <YAxis stroke="#7f8c8d" />
+            <Tooltip 
+              contentStyle={{
+                background: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+              }}
+            />
             <Legend />
-            <Bar dataKey="documents" fill="#8884d8" name="Documents" />
-            <Bar dataKey="projects" fill="#82ca9d" name="Projects" />
+            <Bar 
+              dataKey="documents" 
+              fill="#8884d8" 
+              name="Documents" 
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar 
+              dataKey="projects" 
+              fill="#82ca9d" 
+              name="Projects" 
+              radius={[4, 4, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
