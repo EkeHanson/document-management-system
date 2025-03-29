@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { DocumentContext } from '../../contexts/DocumentContext';
+import DocumentContext from '../../contexts/DocumentContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useDocuments } from '../../hooks/useDocuments';
 import { Table, Button, Input, Select, Tag, Space, message, Card } from 'antd';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDocuments } from '../../hooks/useDocuments';
 import { useProjects } from '../../hooks/useProjects';
-import { FaFileAlt, FaProjectDiagram, FaClock, FaCalendarAlt, FaSearch } from 'react-icons/fa';
+import { FaFileAlt, FaProjectDiagram, FaClock, FaCalendarAlt, FaSearch, FaEye, FaDownload, FaShare, FaArrowRight } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import DocumentCard from '../../components/documents/DocumentCard';
 import ProjectCard from '../../components/projects/ProjectCard';
@@ -22,18 +22,10 @@ const Overview = () => {
     { name: 'May', documents: 18, projects: 5 },
   ];
 
-  // Filter documents based on search and filter
-  const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = activeFilter === 'all' || doc.status === activeFilter;
-    return matchesSearch && matchesFilter;
-  });
-
   // Get recent documents and projects
   const recentDocuments = [...documents]
     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    .slice(0, 3);
+    .slice(0, 4); // Show 4 recent documents
 
   const activeProjects = projects.filter(project => project.status === 'active');
 
@@ -57,7 +49,7 @@ const Overview = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">
-            <FaFileAlt />
+            <FaFileAlt size={20} />
           </div>
           <div className="stat-content">
             <h3>Total Documents</h3>
@@ -67,7 +59,7 @@ const Overview = () => {
 
         <div className="stat-card">
           <div className="stat-icon">
-            <FaProjectDiagram />
+            <FaProjectDiagram size={20} />
           </div>
           <div className="stat-content">
             <h3>Active Projects</h3>
@@ -77,7 +69,7 @@ const Overview = () => {
 
         <div className="stat-card">
           <div className="stat-icon">
-            <FaClock />
+            <FaClock size={20} />
           </div>
           <div className="stat-content">
             <h3>Pending Reviews</h3>
@@ -87,7 +79,7 @@ const Overview = () => {
 
         <div className="stat-card">
           <div className="stat-icon">
-            <FaCalendarAlt />
+            <FaCalendarAlt size={20} />
           </div>
           <div className="stat-content">
             <h3>Upcoming Deadlines</h3>
@@ -101,27 +93,28 @@ const Overview = () => {
         <h2>Monthly Activity</h2>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="name" stroke="#7f8c8d" />
-            <YAxis stroke="#7f8c8d" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="name" stroke="#64748b" />
+            <YAxis stroke="#64748b" />
             <Tooltip 
               contentStyle={{
-                background: '#fff',
+                background: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                padding: '12px'
               }}
             />
             <Legend />
             <Bar 
               dataKey="documents" 
-              fill="#8884d8" 
+              fill="#818cf8" 
               name="Documents" 
               radius={[4, 4, 0, 0]}
             />
             <Bar 
               dataKey="projects" 
-              fill="#82ca9d" 
+              fill="#4fd1c5" 
               name="Projects" 
               radius={[4, 4, 0, 0]}
             />
@@ -129,26 +122,66 @@ const Overview = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Recent Documents */}
+      {/* Recent Documents with Swagger */}
       <div className="recent-section">
-        <h2>Recent Documents</h2>
+        <div className="section-header">
+          <h2>
+            <FaFileAlt /> Recent Documents
+          </h2>
+          <a href="#" className="view-all-link">
+            View All <FaArrowRight />
+          </a>
+        </div>
         <div className="documents-grid">
           {recentDocuments.map(doc => (
-            <DocumentCard 
-              key={doc.id} 
-              document={doc} 
-              showStatus={true}
-              className="recent-document"
-            />
+            <div key={doc.id} className="document-card">
+              <div className="document-content">
+                <div className="document-header">
+                  <div className="document-title">
+                    {doc.title}
+                    <span className={`document-status status-${doc.status.toLowerCase()}`}>
+                      {doc.status}
+                    </span>
+                  </div>
+                  <p className="document-description">
+                    {doc.description || 'No description available'}
+                  </p>
+                </div>
+                <div className="document-meta">
+                  <span>Updated: {new Date(doc.updatedAt).toLocaleDateString()}</span>
+                  <span>By: {doc.author || 'Unknown'}</span>
+                </div>
+                <div className="document-footer">
+                  <div className="document-actions">
+                    <button className="document-action" title="View">
+                      <FaEye />
+                    </button>
+                    <button className="document-action" title="Download">
+                      <FaDownload />
+                    </button>
+                    <button className="document-action" title="Share">
+                      <FaShare />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Active Projects */}
       <div className="recent-section">
-        <h2>Active Projects</h2>
+        <div className="section-header">
+          <h2>
+            <FaProjectDiagram /> Active Projects
+          </h2>
+          <a href="#" className="view-all-link">
+            View all <FaArrowRight size={12} />
+          </a>
+        </div>
         <div className="projects-grid">
-          {activeProjects.slice(0, 3).map(project => (
+          {activeProjects.slice(0, 4).map(project => (
             <ProjectCard 
               key={project.id}
               project={project}

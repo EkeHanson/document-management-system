@@ -6,21 +6,21 @@ const useProjects = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get('/projects');
-        setProjects(response.data);
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-        console.error('Failed to fetch projects:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/projects');
+      setProjects(response.data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error('Failed to fetch projects:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProjects();
   }, []);
 
@@ -69,6 +69,7 @@ const useProjects = () => {
     activeProjects,
     loading,
     error,
+    fetchProjects, // Add this to the returned object
     addProject,
     updateProject,
     deleteProject

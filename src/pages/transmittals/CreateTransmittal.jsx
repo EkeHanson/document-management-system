@@ -23,7 +23,7 @@ import {
   SearchOutlined,
   PaperClipOutlined
 } from '@ant-design/icons';
-import { DocumentContext } from '../../contexts/DocumentContext';
+import DocumentContext from '../../contexts/DocumentContext';
  import { AuthContext } from '../../contexts/AuthContext';
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import DocumentSelector from './DocumentSelector';

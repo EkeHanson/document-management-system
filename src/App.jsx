@@ -39,6 +39,8 @@ import SystemSettings from './pages/admin/SystemSettings';
 import LandingPage from './pages/landing/LandingPage';
 import Error404 from './pages/Error404';
 
+import { DocumentProvider } from './contexts/DocumentContext';
+
 // Protected Route Component
 const ProtectedRoute = ({ requiredRoles = [] }) => {
   const { currentUser, loading } = useAuthContext();
@@ -74,6 +76,8 @@ const App = () => {
    
     <Router>
       <AuthProvider>
+      <DocumentProvider>
+        
       <ProjectProvider>
         <Routes>
           {/* Public Routes - Landing Page and Authentication */}
@@ -154,6 +158,7 @@ const App = () => {
           <Route path="*" element={<Error404 />} />
         </Routes>
         </ProjectProvider>
+        </DocumentProvider>
       </AuthProvider>
     </Router>
     
