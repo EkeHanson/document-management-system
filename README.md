@@ -100,6 +100,19 @@ dms-react-vite/
 │   │   ├── dci/
 │   │   │   ├── DCIManagement.jsx
 │   │   │   └── DCIUpload.jsx
+│   │   ├── landing/
+│   │   │   ├── components/
+│   │   │   │   ├── CtaSection.jsx
+│   │   │   │   ├── FeaturesSection.jsx
+│   │   │   │   ├── FileTypesSection.jsx
+│   │   │   │   ├── HeroSection.jsx
+│   │   │   │   ├── TestimonialsSection.jsx
+│   │   │   │   └── WorkflowSection.jsx
+│   │   │   ├── styles/
+│   │   │   │   ├── features.css
+│   │   │   │   ├── landing.css
+│   │   │   │   └── LandingPage.css
+│   │   │   └── LandingPage.jsx
 │   │   ├── transmittals/
 │   │   │   ├── TransmittalList.jsx
 │   │   │   ├── CreateTransmittal.jsx
@@ -144,7 +157,6 @@ dms-react-vite/
 ├── vite.config.js
 └── README.md
 ```
-
 ## Pages to Implement
 
 1. **Authentication Pages**
