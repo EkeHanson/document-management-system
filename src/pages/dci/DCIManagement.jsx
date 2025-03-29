@@ -26,7 +26,7 @@ import {
   DeleteOutlined,
   SyncOutlined
 } from '@ant-design/icons';
-import { DocumentContext } from '../../contexts/DocumentContext';
+//import { DocumentContext } from '../../contexts/DocumentContext';
 // import { AuthContext } from '../../contexts/AuthContext';
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import DCIFilter from './DCIFilter';
@@ -39,7 +39,7 @@ const { RangePicker } = DatePicker;
 
 const DCIManagement = () => {
   // const { currentProject } = useContext(AuthContext);
-  const { dcis, loading, error, fetchDCIs, deleteDCI, exportDCI } = useContext(DocumentContext);
+  // const { dcis, loading, error, fetchDCIs, deleteDCI, exportDCI } = useContext(DocumentContext);
   const [filteredDCIs, setFilteredDCIs] = useState([]);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [searchText, setSearchText] = useState('');

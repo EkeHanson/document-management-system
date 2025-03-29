@@ -23,7 +23,7 @@ import {
   SearchOutlined,
   PaperClipOutlined
 } from '@ant-design/icons';
-import { DocumentContext } from '../../contexts/DocumentContext';
+//import { DocumentContext } from '../../contexts/DocumentContext';
 // import { AuthContext } from '../../contexts/AuthContext';
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import DocumentSelector from './DocumentSelector';
@@ -35,14 +35,14 @@ const CreateTransmittal = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   // const { currentProject, currentUser } = useContext(AuthContext);
-  const { 
-    documents, 
-    recipients, 
-    loading, 
-    fetchDocuments, 
-    fetchRecipients, 
-    createTransmittal 
-  } = useContext(DocumentContext);
+  // const { 
+  //   documents, 
+  //   recipients, 
+  //   loading, 
+  //   fetchDocuments, 
+  //   fetchRecipients, 
+  //   createTransmittal 
+  // } = useContext(DocumentContext);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [documentSearchText, setDocumentSearchText] = useState('');
   const [isDocumentModalVisible, setIsDocumentModalVisible] = useState(false);

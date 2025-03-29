@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 // import { ProjectContext } from '../../contexts/ProjectContext';
-import { DocumentContext } from '../../contexts/DocumentContext';
+//import { DocumentContext } from '../../contexts/DocumentContext';
 // import { AuthContext } from '../../contexts/AuthContext';
 import Loader from '../../components/common/Loader';
 import Tabs from '../../components/common/Tabs';
@@ -15,7 +15,7 @@ import Breadcrumbs from '../../components/common/Breadcrumbs';
 const ProjectDetail = () => {
   const { id } = useParams();
   const { project, loading, fetchProject, error } = useContext(ProjectContext);
-  const { documents, fetchProjectDocuments } = useContext(DocumentContext);
+  //const { documents, fetchProjectDocuments } = useContext(DocumentContext);
   // const { user } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('overview');
 

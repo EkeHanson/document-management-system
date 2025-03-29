@@ -25,7 +25,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined
 } from '@ant-design/icons';
-import { DocumentContext } from '../../contexts/DocumentContext';
+//import { DocumentContext } from '../../contexts/DocumentContext';
 // import { AuthContext } from '../../contexts/AuthContext';
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import TransmittalStatusBadge from './TransmittalStatusBadge';
@@ -38,15 +38,15 @@ const TransmittalDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   // const { currentUser } = useContext(AuthContext);
-  const { 
-    currentTransmittal, 
-    loading, 
-    error, 
-    fetchTransmittal, 
-    updateTransmittalStatus,
-    downloadTransmittal,
-    sendTransmittal
-  } = useContext(DocumentContext);
+  // const { 
+  //   currentTransmittal, 
+  //   loading, 
+  //   error, 
+  //   fetchTransmittal, 
+  //   updateTransmittalStatus,
+  //   downloadTransmittal,
+  //   sendTransmittal
+  // } = useContext(DocumentContext);
   const [activeTab, setActiveTab] = useState('details');
   const [isSending, setIsSending] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
