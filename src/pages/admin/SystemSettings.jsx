@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LogoUpload from '../../components/LogoUpload';
 import { 
   FiSave, FiSettings, FiUpload, FiDownload, FiDatabase, 
   FiShield, FiBell, FiMail, FiSmartphone, FiImage,
@@ -9,12 +10,12 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Loader from '../../components/common/Loader';
 import api from '../../services/api';
-import LogoUpload from '../../assets/images/christmas_2012_new_4009.jpg';
+import defaultLogo from '../../assets/images/christmas_2012_new_4009.jpg';
 
 const SystemSettings = () => {
   const [settings, setSettings] = useState({
     systemName: 'Document Management System',
-    logo: '',
+    logo: defaultLogo, 
     theme: 'light',
     defaultRole: 'user',
     sessionTimeout: 30,
@@ -78,7 +79,48 @@ const SystemSettings = () => {
     try {
       setLoading(true);
       const response = await api.get('/settings');
-      setSettings(response.data);
+      // Ensure all nested objects exist in the response
+      const fetchedSettings = {
+        ...settings, // Use defaults as fallback
+        ...response.data, // Override with fetched data
+        passwordPolicy: {
+          ...settings.passwordPolicy,
+          ...response.data.passwordPolicy,
+        },
+        documentSettings: {
+          ...settings.documentSettings,
+          ...response.data.documentSettings,
+          watermark: {
+            ...settings.documentSettings.watermark,
+            ...response.data.documentSettings?.watermark,
+          },
+          versioning: {
+            ...settings.documentSettings.versioning,
+            ...response.data.documentSettings?.versioning,
+          },
+        },
+        fileUpload: {
+          ...settings.fileUpload,
+          ...response.data.fileUpload,
+        },
+        notifications: {
+          ...settings.notifications,
+          ...response.data.notifications,
+          types: {
+            ...settings.notifications.types,
+            ...response.data.notifications?.types,
+          },
+        },
+        backup: {
+          ...settings.backup,
+          ...response.data.backup,
+        },
+        integrations: {
+          ...settings.integrations,
+          ...response.data.integrations,
+        },
+      };
+      setSettings(fetchedSettings);
     } catch (error) {
       toast.error('Failed to fetch settings');
       console.error('Settings fetch error:', error);
