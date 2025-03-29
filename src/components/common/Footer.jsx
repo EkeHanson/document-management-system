@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { 
   FaLinkedin, 
   FaTwitter, 
-  FaYoutube,
-  FaGithub
+  FaYoutube, 
+  FaGithub, 
+  FaInstagram, 
+  FaFacebook 
 } from 'react-icons/fa';
+
 
 const Footer = () => {
   return (
@@ -18,10 +21,11 @@ const Footer = () => {
               The complete document management solution for engineering teams
             </p>
             <div className="footer-social">
-              <a href="#"><FaLinkedin /></a>
+              <a href="https://www.linkedin.com/company/11414123/admin/dashboard/"><FaLinkedin /></a>
               <a href="#"><FaTwitter /></a>
               <a href="#"><FaYoutube /></a>
-              <a href="#"><FaGithub /></a>
+              <a href="https://www.facebook.com/share/1EWGRcmhEa/"><FaFacebook /></a>
+              <a href="https://www.instagram.com/prolianceltd?igsh=MTB2cHBxdjU0MTAzYg=="><FaInstagram /></a>
             </div>
           </div>
           
