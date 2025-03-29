@@ -59,8 +59,19 @@ export const DocumentProvider = ({ children }) => {
   const fetchDocuments = useCallback(async (projectId) => {
     setLoading(true);
     try {
-      // Replace with actual API call
       const response = await fetch(`/api/projects/${projectId}/documents`);
+      
+      // First check if the response is OK
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      // Then check content type to ensure it's JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new TypeError("Response wasn't JSON");
+      }
+      
       const data = await response.json();
       setDocuments(data);
       setError(null);
@@ -72,7 +83,6 @@ export const DocumentProvider = ({ children }) => {
       setLoading(false);
     }
   }, []);
-
   // Fetch recipients for a project
   const fetchRecipients = useCallback(async (projectId) => {
     setLoading(true);
