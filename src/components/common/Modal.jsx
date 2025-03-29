@@ -32,7 +32,7 @@ const Modal = ({
     <div className="modal__overlay" onClick={handleOverlayClick}>
       <div className={`modal ${sizeClasses[size]}`}>
         <div className="modal__header">
-          <h3 className="modal__title">{title}</h3>
+          <h3 className="modal__title">{title} </h3>
           <button 
             className="modal__close-button" 
             onClick={onClose}

@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <div className="app-layout">
       <Sidebar />
-      <div className="main-content">
+      <div className="main-content" style={{ marginLeft: '250px' }}> {/* Add marginLeft */}
         <Topbar />
         <main className="content-area">
           <Outlet />
