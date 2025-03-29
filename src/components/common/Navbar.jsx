@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logo from '../../assets/images/proliance.png'
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   FaRegFileAlt, 
@@ -70,8 +71,12 @@ const Navbar = ({ onSidebarToggle, isSidebarCollapsed }) => {
         </button>
 
         {/* Brand Logo */}
-        <Link to="/" className="navbar-brand">
+        {/* <Link to="/" className="navbar-brand">
           <FaRegFileAlt className="brand-icon" />
+          <span className="brand-text">EngineeringDMS</span>
+        </Link> */}
+        <Link to="/" className="navbar-brand">
+          <img src={logo} alt="Company Logo" className="brand-logo" />
           <span className="brand-text">EngineeringDMS</span>
         </Link>
 
