@@ -53,9 +53,9 @@ const ProtectedRoute = ({ requiredRoles = [] }) => {
   //   return <Navigate to="/login" replace />;
   // }
 
-  if (requiredRoles.length > 0 && !requiredRoles.includes(currentUser.role)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
+  // if (requiredRoles.length > 0 && !requiredRoles.includes(currentUser.role)) {
+  //   return <Navigate to="/unauthorized" replace />;
+  // }
 
   return <Outlet />;
 };

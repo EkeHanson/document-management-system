@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FiSave, FiSettings, FiUpload, FiDownload, FiDatabase, 
-  FiShield, FiBell, FiMail, FiSmartphone, FiImage 
+  FiShield, FiBell, FiMail, FiSmartphone, FiImage,
+  FiFileText, FiFile, FiArchive
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -9,8 +10,6 @@ import 'react-tabs/style/react-tabs.css';
 import Loader from '../../components/common/Loader';
 import api from '../../services/api';
 import LogoUpload from '../../assets/images/christmas_2012_new_4009.jpg';
-
-// \assets\images\christmas_2012_new_4009.jpg
 
 const SystemSettings = () => {
   const [settings, setSettings] = useState({

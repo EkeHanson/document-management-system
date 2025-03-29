@@ -42,21 +42,32 @@ const RoleManagement = () => {
   }, []);
 
   useEffect(() => {
-    const results = roles.filter(role =>
-      role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      role.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredRoles(results);
+    if (Array.isArray(roles)) {
+      const results = roles.filter(role =>
+        role.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        role.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRoles(results);
+    }
   }, [searchTerm, roles]);
 
   const fetchRoles = async () => {
     try {
       setLoading(true);
       const response = await api.get('/roles');
-      setRoles(response.data);
-      setFilteredRoles(response.data);
+      // Ensure the response data is an array
+      if (Array.isArray(response.data)) {
+        setRoles(response.data);
+        setFilteredRoles(response.data);
+      } else {
+        toast.error('Invalid roles data received');
+        setRoles([]);
+        setFilteredRoles([]);
+      }
     } catch (error) {
       toast.error('Failed to fetch roles');
+      setRoles([]);
+      setFilteredRoles([]);
     } finally {
       setLoading(false);
     }
@@ -110,7 +121,7 @@ const RoleManagement = () => {
     setFormData({
       name: role.name,
       description: role.description,
-      permissions: role.permissions
+      permissions: role.permissions || []
     });
     setIsModalOpen(true);
   };
@@ -166,7 +177,7 @@ const RoleManagement = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredRoles.map((role) => (
+              {Array.isArray(filteredRoles) && filteredRoles.map((role) => (
                 <tr key={role.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -183,7 +194,7 @@ const RoleManagement = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-900">
-                      {role.permissions.length > 0 ? (
+                      {role.permissions?.length > 0 ? (
                         <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
                           {role.permissions.length} permissions
                         </span>
