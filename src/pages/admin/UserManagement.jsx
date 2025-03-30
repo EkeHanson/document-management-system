@@ -8,14 +8,17 @@ import {
   FaUser,
   FaKey,
   FaSyncAlt,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaCopy,
+  FaHistory
 } from 'react-icons/fa';
 import { MdEmail, MdPerson, MdAdminPanelSettings } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import Modal from '../../components/common/Modal';
 import Loader from '../../components/common/Loader';
+import './UserManagement.css';
 
-// Dummy user data for testing
+// Dummy user data with enhanced security fields
 const dummyUsers = [
   {
     id: '1',
@@ -23,7 +26,8 @@ const dummyUsers = [
     email: 'root@example.com',
     role: 'root_admin',
     status: 'active',
-    lastActive: new Date().toISOString()
+    lastActive: new Date().toISOString(),
+    passwordChangedAt: new Date().toISOString()
   },
   {
     id: '2',
@@ -31,7 +35,8 @@ const dummyUsers = [
     email: 'manager@example.com',
     role: 'admin',
     status: 'active',
-    lastActive: new Date(Date.now() - 86400000).toISOString() // 1 day ago
+    lastActive: new Date(Date.now() - 86400000).toISOString(),
+    passwordChangedAt: new Date(Date.now() - 86400000).toISOString()
   },
   {
     id: '3',
@@ -39,7 +44,8 @@ const dummyUsers = [
     email: 'editor@example.com',
     role: 'editor',
     status: 'active',
-    lastActive: new Date(Date.now() - 259200000).toISOString() // 3 days ago
+    lastActive: new Date(Date.now() - 259200000).toISOString(),
+    passwordChangedAt: new Date(Date.now() - 259200000).toISOString()
   },
   {
     id: '4',
@@ -47,11 +53,22 @@ const dummyUsers = [
     email: 'guest@example.com',
     role: 'guest',
     status: 'inactive',
-    lastActive: null
+    lastActive: null,
+    passwordChangedAt: null
   }
 ];
 
-// Mock API service
+// Password generator function
+const generateStrongPassword = () => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%^&*';
+  let password = '';
+  for (let i = 0; i < 12; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+};
+
+// Enhanced mock service with password management
 const mockUserService = {
   fetchUsers: () => new Promise(resolve => {
     setTimeout(() => resolve([...dummyUsers]), 500);
@@ -60,17 +77,7 @@ const mockUserService = {
   updateUser: (userId, data) => new Promise((resolve, reject) => {
     setTimeout(() => {
       const userIndex = dummyUsers.findIndex(u => u.id === userId);
-      
-      if (userIndex === -1) {
-        reject(new Error('User not found'));
-        return;
-      }
-      
-      // Simulate validation
-      if (data.name.length < 2) {
-        reject(new Error('Name must be at least 2 characters'));
-        return;
-      }
+      if (userIndex === -1) reject(new Error('User not found'));
       
       const updatedUser = { ...dummyUsers[userIndex], ...data };
       dummyUsers[userIndex] = updatedUser;
@@ -88,15 +95,27 @@ const mockUserService = {
   
   resetPassword: (userId, newPassword) => new Promise(resolve => {
     setTimeout(() => {
+      const user = dummyUsers.find(u => u.id === userId);
+      if (user) {
+        user.passwordChangedAt = new Date().toISOString();
+      }
       resolve({ success: true });
     }, 500);
   }),
   
   generatePassword: (userId) => new Promise(resolve => {
     setTimeout(() => {
-      const tempPassword = Math.random().toString(36).slice(-8);
+      const tempPassword = generateStrongPassword();
       resolve({ tempPassword });
     }, 400);
+  }),
+  
+  sendPasswordEmail: (userId, tempPassword) => new Promise(resolve => {
+    setTimeout(() => {
+      console.log(`[Mock] Email sent to user ${userId} with temp password: ${tempPassword}`);
+      alert(`[Mock] Email sent to user ${userId} with temp password: ${tempPassword}`);
+      resolve();
+    }, 300);
   })
 };
 
@@ -109,6 +128,8 @@ const UserManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [generatedPasswords, setGeneratedPasswords] = useState({});
+  const [showPasswordHistory, setShowPasswordHistory] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -174,19 +195,60 @@ const UserManagement = () => {
     e.preventDefault();
     try {
       if (currentUser) {
-        const updatedUser = await mockUserService.updateUser(currentUser.id, formData);
+        await mockUserService.updateUser(currentUser.id, formData);
         toast.success('User updated successfully');
-        fetchUsers();
       } else {
-        // In a real implementation, this would call the API to create user
+        const tempPassword = generateStrongPassword();
         const newUser = {
           ...formData,
           id: `user-${Math.random().toString(36).substr(2, 9)}`,
-          lastActive: null
+          lastActive: null,
+          passwordChangedAt: null
         };
+        
         setUsers(prev => [...prev, newUser]);
         setFilteredUsers(prev => [...prev, newUser]);
-        toast.success('User created successfully');
+        
+        // Store the generated password
+        setGeneratedPasswords(prev => ({
+          ...prev,
+          [newUser.id]: {
+            password: tempPassword,
+            timestamp: new Date().toISOString(),
+            userName: newUser.name
+          }
+        }));
+        
+        // Show password to admin
+        toast.success(
+          <div>
+            <p>User created successfully</p>
+            <div className="password-history-password">
+              <span>{tempPassword}</span>
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText(tempPassword);
+                  toast.info('Password copied to clipboard');
+                }}
+                className="password-history-copy"
+              >
+                <FaCopy />
+              </button>
+            </div>
+            <div className="alert alert-error">
+              <p>
+                For security reasons:
+                <br />• Never store this password in plain text
+                <br />• The user must change it on first login
+                <br />• This notification will not appear again
+              </p>
+            </div>
+          </div>,
+          { autoClose: 15000 }
+        );
+        
+        // In a real app, you would send this via email
+        await mockUserService.sendPasswordEmail(newUser.id, tempPassword);
       }
       setIsModalOpen(false);
       setCurrentUser(null);
@@ -213,18 +275,51 @@ const UserManagement = () => {
     }
   };
 
-  const handleGeneratePassword = async (userId) => {
-    if (window.confirm('Generate a new random password for this user?')) {
+  const handleGeneratePassword = async (userId, userName) => {
+    if (window.confirm(`Generate a new random password for ${userName}?`)) {
       try {
         const { tempPassword } = await mockUserService.generatePassword(userId);
+        
+        // Store the password with user info
+        setGeneratedPasswords(prev => ({
+          ...prev,
+          [userId]: {
+            password: tempPassword,
+            timestamp: new Date().toISOString(),
+            userName
+          }
+        }));
+
+        // Show copyable password
         toast.success(
           <div>
-            <p>New password generated successfully</p>
-            <p className="font-bold mt-2">Temporary Password: {tempPassword}</p>
-            <p className="text-sm text-yellow-600">Please inform the user to change this password immediately</p>
+            <p>New password generated for {userName}</p>
+            <div className="password-history-password">
+              <span>{tempPassword}</span>
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText(tempPassword);
+                  toast.info('Password copied to clipboard');
+                }}
+                className="password-history-copy"
+              >
+                <FaCopy />
+              </button>
+            </div>
+            <div className="alert alert-error">
+              <p>
+                For security reasons:
+                <br />• Never store this password in plain text
+                <br />• The user must change it immediately
+                <br />• This notification will not appear again
+              </p>
+            </div>
           </div>,
-          { autoClose: 10000 }
+          { autoClose: 15000 }
         );
+        
+        // In a real app, you would send this via email
+        await mockUserService.sendPasswordEmail(userId, tempPassword);
       } catch (err) {
         toast.error('Failed to generate password');
       }
@@ -270,11 +365,11 @@ const UserManagement = () => {
 
   const getRoleIcon = (role) => {
     switch (role) {
-      case 'root_admin': return <MdAdminPanelSettings className="text-red-500" />;
-      case 'admin': return <FaUserShield className="text-purple-500" />;
-      case 'reviewer': return <FaUserShield className="text-blue-500" />;
-      case 'editor': return <FaEdit className="text-green-500" />;
-      default: return <FaUser className="text-gray-500" />;
+      case 'root_admin': return <MdAdminPanelSettings className="user-role-icon" />;
+      case 'admin': return <FaUserShield className="user-role-icon" />;
+      case 'reviewer': return <FaUserShield className="user-role-icon" />;
+      case 'editor': return <FaEdit className="user-role-icon" />;
+      default: return <FaUser className="user-role-icon" />;
     }
   };
 
@@ -283,118 +378,195 @@ const UserManagement = () => {
     return roleObj ? roleObj.label : roleValue;
   };
 
-  return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">User Management</h1>
-        <button
-          onClick={() => {
-            setCurrentUser(null);
-            setIsModalOpen(true);
-          }}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center"
+  const PasswordHistory = () => (
+    <div className="password-history">
+      <div className="password-history-header">
+        <h3 className="password-history-title">Generated Passwords</h3>
+        <button 
+          onClick={() => setShowPasswordHistory(!showPasswordHistory)}
+          className="password-history-toggle"
         >
-          <FaUserPlus className="mr-2" /> Add User
+          {showPasswordHistory ? 'Hide' : 'Show'} <FaHistory className="password-history-icon" />
         </button>
       </div>
+      
+      {showPasswordHistory && (
+        Object.entries(generatedPasswords).length === 0 ? (
+          <p className="empty-state">No passwords generated in this session</p>
+        ) : (
+          <ul className="password-history-list">
+            {Object.entries(generatedPasswords).map(([userId, data]) => {
+              const user = users.find(u => u.id === userId);
+              return (
+                <li key={userId} className="password-history-item">
+                  <span>
+                    <span className="password-history-user">{data.userName}</span>
+                    <span className="password-history-timestamp">
+                      {new Date(data.timestamp).toLocaleString()}
+                    </span>
+                    {user?.passwordChangedAt && (
+                      <span className="password-history-changed">(Changed)</span>
+                    )}
+                  </span>
+                  <div className="password-history-actions">
+                    <span className="password-history-password">
+                      {data.password}
+                    </span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(data.password);
+                        toast.info(`Copied password for ${data.userName}`);
+                      }}
+                      className="password-history-copy"
+                      title="Copy password"
+                    >
+                      <FaCopy />
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )
+      )}
+    </div>
+  );
 
-      <div className="mb-6 relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <FaSearch className="text-gray-400" />
+  return (
+    <div className="user-management-container">
+      <div className="user-management-header">
+        <h1 className="user-management-title">User Management</h1>
+        <div className="user-management-actions">
+          <button
+            onClick={fetchUsers}
+            className="btn btn-secondary"
+            title="Refresh users"
+          >
+            <FaSyncAlt className="btn-icon" />
+          </button>
+          <button
+            onClick={() => {
+              setCurrentUser(null);
+              setIsModalOpen(true);
+            }}
+            className="btn btn-primary"
+          >
+            <FaUserPlus className="btn-icon" /> Add User
+          </button>
         </div>
+      </div>
+
+      <div className="user-search-container">
+        <FaSearch className="user-search-icon" />
         <input
           type="text"
           placeholder="Search users by name or email..."
-          className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="user-search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
+      {error && (
+        <div className="alert alert-error">
+          <div className="alert-icon">
+            <FaExclamationTriangle />
+          </div>
+          <div className="alert-content">
+            <p>{error}</p>
+          </div>
+        </div>
+      )}
+
       {loading ? (
-        <Loader />
+        <div className="loader">
+          <div className="loader-spinner"></div>
+        </div>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="user-table-container">
           {filteredUsers.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
+            <div className="empty-state">
               No users found matching your search
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="user-table">
+                <thead>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody>
                   {filteredUsers.map((user) => (
                     <tr key={user.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <MdPerson className="text-blue-600 text-xl" />
+                      <td>
+                        <div className="user-avatar">
+                          <div className="user-avatar-icon">
+                            <MdPerson />
                           </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                            <div className="text-sm text-gray-500">ID: {user.id}</div>
+                          <div className="user-avatar-info">
+                            <div className="user-name">{user.name}</div>
+                            <div className="user-id">ID: {user.id}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <MdEmail className="text-gray-500 mr-2" />
-                          <div className="text-sm text-gray-900">{user.email}</div>
+                      <td>
+                        <div className="user-email">
+                          <MdEmail className="user-email-icon" />
+                          <div>{user.email}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
+                      <td>
+                        <div className="user-role">
                           {getRoleIcon(user.role)}
-                          <div className="ml-2">
-                            <div className="capitalize">{getRoleLabel(user.role)}</div>
-                            <div className="text-xs text-gray-500">
+                          <div className="user-role-info">
+                            <div className="user-role-name">{getRoleLabel(user.role)}</div>
+                            <div className="user-role-last-active">
                               Last active: {user.lastActive ? new Date(user.lastActive).toLocaleString() : 'Never'}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                          ${user.status === 'active' ? 'bg-green-100 text-green-800' : 
-                            user.status === 'inactive' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
+                      <td>
+                        <span className={`user-status user-status-${user.status}`}>
                           {user.status}
                         </span>
+                        {user.passwordChangedAt && (
+                          <div className="user-pw-changed">
+                            PW changed: {new Date(user.passwordChangedAt).toLocaleDateString()}
+                          </div>
+                        )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
+                      <td>
+                        <div className="user-actions">
                           <button
                             onClick={() => handleEdit(user)}
-                            className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                            className="user-action-btn user-action-edit"
                             title="Edit user"
                           >
                             <FaEdit />
                           </button>
                           <button
                             onClick={() => handlePasswordResetClick(user)}
-                            className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
+                            className="user-action-btn user-action-password"
                             title="Reset password"
                           >
                             <FaKey />
                           </button>
                           <button
-                            onClick={() => handleGeneratePassword(user.id)}
-                            className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                            onClick={() => handleGeneratePassword(user.id, user.name)}
+                            className="user-action-btn user-action-generate"
                             title="Generate new password"
                           >
                             <FaSyncAlt />
                           </button>
                           <button
                             onClick={() => handleDelete(user.id)}
-                            className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
+                            className="user-action-btn user-action-delete"
                             title="Delete user"
                           >
                             <FaTrash />
@@ -410,6 +582,8 @@ const UserManagement = () => {
         </div>
       )}
 
+      <PasswordHistory />
+
       {/* User Edit/Create Modal */}
       <Modal 
         isOpen={isModalOpen} 
@@ -422,40 +596,40 @@ const UserManagement = () => {
         size="lg"
       >
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">Full Name *</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
                 required
                 minLength="2"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+            <div className="form-group">
+              <label className="form-label">Email *</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
                 required
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role *</label>
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">Role *</label>
               <select
                 name="role"
                 value={formData.role}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="form-select"
                 required
               >
                 {roles.map((role) => (
@@ -465,18 +639,18 @@ const UserManagement = () => {
                 ))}
               </select>
               {formData.role && (
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="form-help-text">
                   {roles.find(r => r.value === formData.role)?.description}
                 </p>
               )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status *</label>
+            <div className="form-group">
+              <label className="form-label">Status *</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="form-select"
                 required
               >
                 <option value="active">Active</option>
@@ -487,21 +661,19 @@ const UserManagement = () => {
           </div>
 
           {!currentUser && (
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <FaExclamationTriangle className="h-5 w-5 text-yellow-400" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-yellow-700">
-                    A temporary password will be automatically generated for new users.
-                  </p>
-                </div>
+            <div className="alert alert-warning">
+              <div className="alert-icon">
+                <FaExclamationTriangle />
+              </div>
+              <div className="alert-content">
+                <p>
+                  A temporary password will be automatically generated and displayed after creation.
+                </p>
               </div>
             </div>
           )}
 
-          <div className="flex justify-end space-x-3 mt-6">
+          <div className="modal-footer">
             <button
               type="button"
               onClick={() => {
@@ -509,13 +681,13 @@ const UserManagement = () => {
                 setCurrentUser(null);
                 resetForm();
               }}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="btn btn-secondary"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="btn btn-primary"
             >
               {currentUser ? 'Update User' : 'Create User'}
             </button>
@@ -533,44 +705,42 @@ const UserManagement = () => {
         title={`Reset Password for ${currentUser?.name || 'User'}`}
       >
         <form onSubmit={handlePasswordReset}>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">New Password *</label>
-              <input
-                type="password"
-                name="newPassword"
-                value={passwordData.newPassword}
-                onChange={handlePasswordChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                required
-                minLength="8"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={passwordData.confirmPassword}
-                onChange={handlePasswordChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                required
-                minLength="8"
-              />
-            </div>
+          <div className="form-group">
+            <label className="form-label">New Password *</label>
+            <input
+              type="password"
+              name="newPassword"
+              value={passwordData.newPassword}
+              onChange={handlePasswordChange}
+              className="form-input"
+              required
+              minLength="8"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Confirm Password *</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={passwordData.confirmPassword}
+              onChange={handlePasswordChange}
+              className="form-input"
+              required
+              minLength="8"
+            />
           </div>
 
-          <div className="mt-6 flex justify-end space-x-3">
+          <div className="modal-footer">
             <button
               type="button"
               onClick={() => setIsPasswordModalOpen(false)}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="btn btn-secondary"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="btn btn-primary"
             >
               Reset Password
             </button>
