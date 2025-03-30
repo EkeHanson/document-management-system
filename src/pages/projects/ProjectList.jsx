@@ -1,12 +1,11 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { Dropdown, Empty } from 'antd';
 import ProjectContext from '../../contexts/ProjectContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import Loader from '../../components/common/Loader';
 import SearchBar from '../../components/common/UserSearch';
-import FilterDropdown from '../../components/common/FilterDropdown';
 import Pagination from '../../components/common/Pagination';
-import EmptyState from '../../components/common/EmptyState';
 
 const ProjectList = () => {
   const { projects, loading, fetchProjects, error } = useContext(ProjectContext);
@@ -51,6 +50,19 @@ const ProjectList = () => {
     setCurrentPage(pageNumber);
   }, []);
 
+  // Status filter dropdown items
+  const statusMenuItems = [
+    { key: 'all', label: 'All Statuses' },
+    { key: 'active', label: 'Active' },
+    { key: 'completed', label: 'Completed' },
+    { key: 'on-hold', label: 'On Hold' },
+  ];
+
+  const handleStatusFilterChange = ({ key }) => {
+    setStatusFilter(key);
+    setCurrentPage(1);
+  };
+
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500 p-4">Error loading projects: {error}</div>;
 
@@ -75,30 +87,42 @@ const ProjectList = () => {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); // Reset to first page when searching
+              setCurrentPage(1);
             }}
           />
           <div className="flex gap-4">
-            <FilterDropdown 
-              options={[
-                { value: 'all', label: 'All Statuses' },
-                { value: 'active', label: 'Active' },
-                { value: 'completed', label: 'Completed' },
-                { value: 'on-hold', label: 'On Hold' },
-              ]}
-              value={statusFilter}
-              onChange={(value) => {
-                setStatusFilter(value);
-                setCurrentPage(1); // Reset to first page when filtering
+            <Dropdown
+              menu={{
+                items: statusMenuItems,
+                onClick: handleStatusFilterChange,
+                selectedKeys: [statusFilter],
               }}
-            />
+              trigger={['click']}
+            >
+              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50">
+                <span>Status: {statusFilter === 'all' ? 'All Statuses' : statusFilter}</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </Dropdown>
           </div>
         </div>
 
         {currentProjects.length === 0 ? (
-          <EmptyState 
-            title="No projects found"
-            description="Try adjusting your search or filter criteria"
+          <Empty
+            description={
+              <div className="text-center">
+                <p className="text-lg font-medium text-gray-900">No projects found</p>
+                <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+              </div>
+            }
+            styles={{
+              image: {
+                height: 60,
+                marginBottom: 16,
+              },
+            }}
           />
         ) : (
           <div className="overflow-x-auto">
