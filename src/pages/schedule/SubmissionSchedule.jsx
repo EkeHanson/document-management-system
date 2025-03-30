@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiCalendar, FiFilter, FiDownload, FiPlus } from 'react-icons/fi';
-// import { useProjectContext } from '../../contexts/ProjectContext';
+import { useProjectContext } from '../../contexts/ProjectContext';
 import ScheduleTable from './ScheduleTable';
 import ScheduleFilter from './ScheduleFilter';
 import AddScheduleItemModal from './AddScheduleItemModal';
@@ -8,10 +8,11 @@ import AddScheduleItemModal from './AddScheduleItemModal';
 import Loader from '../../components/common/Loader';
 
 const SubmissionSchedule = () => {
-  //const { currentProject, fetchProjectSchedule } = useProjectContext();
+  const { currentProject, fetchProjectSchedule } = useProjectContext();
   const [scheduleItems, setScheduleItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [filters, setFilters] = useState({
@@ -21,18 +22,41 @@ const SubmissionSchedule = () => {
   });
 
   useEffect(() => {
+    let isMounted = true;
+    
     const loadSchedule = async () => {
-      if ("currentProject") {
+      try {
+        setError(null);
+        if (!currentProject?.id) {
+          setLoading(false);
+          return;
+        }
+        
+        setLoading(true);
         const items = await fetchProjectSchedule(currentProject.id);
-        setScheduleItems(items);
-        setFilteredItems(items);
-        setLoading(false);
+        if (isMounted) {
+          setScheduleItems(items);
+          setFilteredItems(items);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError('Failed to load schedule. Please try again.');
+          console.error('Error loading schedule:', err);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+    
     loadSchedule();
-   }, []);
-  // }, [currentProject, fetchProjectSchedule]);
-
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [currentProject, fetchProjectSchedule]);
+  
   useEffect(() => {
     applyFilters();
   }, [filters, scheduleItems]);
@@ -69,7 +93,28 @@ const SubmissionSchedule = () => {
     // exportToExcel(filteredItems, 'submission_schedule');
   };
 
-  if (loading) return <Loader />;
+  if (loading) {
+    if (!currentProject) {
+      return (
+        <div className="container mx-auto px-4 py-8 text-center">
+          <div className="bg-yellow-50 text-yellow-800 p-4 rounded-lg inline-block">
+            No project selected. Please select a project first.
+          </div>
+        </div>
+      );
+    }
+    return <Loader />;
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <div className="bg-red-50 text-red-800 p-4 rounded-lg inline-block">
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -116,6 +161,7 @@ const SubmissionSchedule = () => {
 
       {showAddModal && (
         <AddScheduleItemModal 
+          isOpen={showAddModal} // Ensure this prop is passed
           onClose={() => setShowAddModal(false)}
           onSave={(newItem) => {
             setScheduleItems([...scheduleItems, newItem]);
@@ -124,6 +170,7 @@ const SubmissionSchedule = () => {
           projectId={currentProject?.id}
         />
       )}
+
     </div>
   );
 };

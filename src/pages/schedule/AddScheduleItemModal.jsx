@@ -20,6 +20,8 @@ import {
   Grid,
   Box
 } from '@mui/material';
+import { useScheduleContext } from '../../contexts/ScheduleContext'; // Make sure path is correct
+
 const schema = yup.object().shape({
   title: yup.string().required('Title is required'),
   description: yup.string(),
@@ -67,7 +69,11 @@ const AddScheduleItemModal = ({ isOpen, onClose, projectId }) => {
 
   const onSubmit = async (data) => {
     try {
-      await addScheduleItem({ ...data, projectId });
+      await addScheduleItem({ 
+        ...data,
+        projectId,
+        dueDate: data.dueDate.toISOString() // Convert date to string
+      });
       onClose();
       reset();
     } catch (error) {
@@ -170,6 +176,8 @@ const AddScheduleItemModal = ({ isOpen, onClose, projectId }) => {
                     options={disciplineOptions}
                     placeholder="Select Discipline"
                     isClearable
+                    onChange={(selected) => field.onChange(selected?.value || '')}
+                    value={disciplineOptions.find(option => option.value === field.value) || null}
                   />
                 )}
               />

@@ -1,20 +1,18 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import  {useAuthContext}  from './AuthContext';  // Change useAuth to useAuthContext
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useAuthContext } from './AuthContext';
 import projectService from '../services/projectService';
 
-// Create context
 const ProjectContext = createContext();
 
-// Context provider component
 export const ProjectProvider = ({ children }) => {
-  const { user } = useAuthContext();  // Instead of useAuthContext()
+  const { user } = useAuthContext();
   const [projects, setProjects] = useState([]);
   const [currentProject, setCurrentProject] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch all projects
-  const fetchProjects = async () => {
+  // Wrap fetchProjects in useCallback to prevent unnecessary recreations
+  const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
       const data = await projectService.getAllProjects();
@@ -26,7 +24,7 @@ export const ProjectProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Empty dependency array means this never changes
 
   // Get project by ID
   const getProjectById = async (id) => {
@@ -111,7 +109,7 @@ export const ProjectProvider = ({ children }) => {
       setProjects([]);
       setCurrentProject(null);
     }
-  }, [user]);
+  }, [user, fetchProjects]); // Add fetchProjects to dependencies
 
   return (
     <ProjectContext.Provider
@@ -133,7 +131,6 @@ export const ProjectProvider = ({ children }) => {
   );
 };
 
-// Custom hook for using the context
 export const useProjectContext = () => {
   const context = useContext(ProjectContext);
   if (!context) {
@@ -142,5 +139,4 @@ export const useProjectContext = () => {
   return context;
 };
 
-// Export the context itself for direct access if needed
 export default ProjectContext;

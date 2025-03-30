@@ -51,6 +51,7 @@ import Compliance from './components/common/Compliance'
 import Careers from './components/common/Careers'
 
 import { DocumentProvider } from './contexts/DocumentContext';
+import { ScheduleProvider } from './contexts/ScheduleContext';
 
 // Protected Route Component
 const ProtectedRoute = ({ requiredRoles = [] }) => {
@@ -88,7 +89,7 @@ const App = () => {
     <Router>
       <AuthProvider>
       <DocumentProvider>
-        
+      <ScheduleProvider>
       <ProjectProvider>
         <Routes>
           {/* Public Routes - Landing Page and Authentication */}
@@ -178,6 +179,7 @@ const App = () => {
           <Route path="*" element={<Error404 />} />
         </Routes>
         </ProjectProvider>
+        </ScheduleProvider>
         </DocumentProvider>
       </AuthProvider>
     </Router>

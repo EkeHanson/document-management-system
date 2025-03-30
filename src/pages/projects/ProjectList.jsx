@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import ProjectContext from '../../contexts/ProjectContext';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -9,7 +9,7 @@ import Pagination from '../../components/common/Pagination';
 import EmptyState from '../../components/common/EmptyState';
 
 const ProjectList = () => {
-  const { projects, loading, fetchProjects } = useContext(ProjectContext);
+  const { projects, loading, fetchProjects, error } = useContext(ProjectContext);
   const { user } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,25 +17,42 @@ const ProjectList = () => {
   const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    let isMounted = true;
+    
+    const loadProjects = async () => {
+      try {
+        await fetchProjects();
+      } catch (err) {
+        console.error("Project fetch error:", err);
+      }
+    };
 
-  // Filter projects based on search term and status
+    if (isMounted) loadProjects();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fetchProjects]);
+
+  // Safely filter projects
   const filteredProjects = (Array.isArray(projects) ? projects : []).filter(project => {
-    const matchesSearch = project.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         project.code?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
+    const matchesSearch = project?.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         project?.code?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || project?.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  // Get current projects for pagination
+  // Pagination
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
   const currentProjects = filteredProjects.slice(indexOfFirstProject, indexOfLastProject);
 
-  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const paginate = useCallback((pageNumber) => {
+    setCurrentPage(pageNumber);
+  }, []);
 
-  if (loading || !Array.isArray(projects)) return <Loader />;
+  if (loading) return <Loader />;
+  if (error) return <div className="text-red-500 p-4">Error loading projects: {error}</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -58,7 +75,7 @@ const ProjectList = () => {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1);
+              setCurrentPage(1); // Reset to first page when searching
             }}
           />
           <div className="flex gap-4">
@@ -70,7 +87,10 @@ const ProjectList = () => {
                 { value: 'on-hold', label: 'On Hold' },
               ]}
               value={statusFilter}
-              onChange={setStatusFilter}
+              onChange={(value) => {
+                setStatusFilter(value);
+                setCurrentPage(1); // Reset to first page when filtering
+              }}
             />
           </div>
         </div>
@@ -133,13 +153,15 @@ const ProjectList = () => {
           </div>
         )}
 
-        <Pagination
-          current={currentPage}
-          total={filteredProjects.length}
-          pageSize={projectsPerPage}
-          onChange={paginate}
-          className="mt-6"
-        />
+        {filteredProjects.length > projectsPerPage && (
+          <Pagination
+            current={currentPage}
+            total={filteredProjects.length}
+            pageSize={projectsPerPage}
+            onChange={paginate}
+            className="mt-6"
+          />
+        )}
       </div>
     </div>
   );
