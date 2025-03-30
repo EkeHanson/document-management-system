@@ -17,6 +17,8 @@ import Notifications from './pages/dashboard/Notifications';
 import DocumentList from './pages/documents/DocumentList';
 import UploadDocument from './pages/documents/UploadDocument';
 import DocumentDetail from './pages/documents/DocumentDetail';
+
+
 import VersionCompare from './pages/documents/VersionCompare';
 import DrawingList from './pages/drawings/DrawingList';
 import DrawingDetail from './pages/drawings/DrawingDetail';
@@ -121,12 +123,19 @@ const App = () => {
               <Route path="/notifications" element={<Notifications />} />
 
               {/* Document Management */}
-              <Route path="/documents">
+              {/* <Route path="/documents">
                 <Route index element={<DocumentList />} />
                 <Route path="upload" element={<UploadDocument />} />
                 <Route path=":documentId" element={<DocumentDetail />} />
                 <Route path="compare/:documentId/:version1/:version2" element={<VersionCompare />} />
-              </Route>
+              </Route> */}
+
+            <Route path="/documents">
+              <Route index element={<DocumentList />} />
+              <Route path="upload" element={<UploadDocument />} />
+              <Route path=":documentId" element={<DocumentDetail />} />
+              <Route path="compare/:documentId/:version1/:version2" element={<VersionCompare />} />
+            </Route>
 
               {/* Drawing Management */}
               <Route path="/drawings">

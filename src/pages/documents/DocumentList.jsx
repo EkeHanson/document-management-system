@@ -1,41 +1,23 @@
-import { useState, useEffect } from 'react';
+// src/pages/documents/DocumentList.jsx
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  FaSearch, 
-  FaFilter, 
-  FaFileAlt, 
-  FaDownload, 
-  FaHistory, 
-  FaEdit 
-} from 'react-icons/fa';
-import { useDocuments } from '../../hooks/useDocuments';
+import { FaSearch, FaFilter, FaFileAlt } from 'react-icons/fa';
+import { dummyDocuments } from '../../utils/dummyData';
 import './Documents.css';
 
 const DocumentList = () => {
-  const { documents, loading, error } = useDocuments();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
-    type: 'all',
-    dateRange: 'all'
+    type: 'all'
   });
 
-  // Safely handle documents data
-  const documentData = Array.isArray(documents) ? documents : [];
-  
-  const filteredDocuments = documentData.filter(doc => {
-    // Check if doc exists and has required properties
-    if (!doc) return false;
-    
-    // Search filter
+  const filteredDocuments = dummyDocuments.filter(doc => {
     const matchesSearch = 
-      (doc.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      (doc.description?.toLowerCase().includes(searchTerm.toLowerCase())));
+      doc.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      (doc.description && doc.description.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    // Status filter
     const matchesStatus = filters.status === 'all' || doc.status === filters.status;
-    
-    // Type filter
     const matchesType = filters.type === 'all' || doc.type === filters.type;
     
     return matchesSearch && matchesStatus && matchesType;
@@ -45,9 +27,6 @@ const DocumentList = () => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
   };
-
-  if (loading) return <div className="loading">Loading documents...</div>;
-  if (error) return <div className="error">Error loading documents: {error}</div>;
 
   return (
     <div className="document-list-container">
@@ -74,10 +53,10 @@ const DocumentList = () => {
             <FaFilter className="filter-icon" />
             <select name="status" value={filters.status} onChange={handleFilterChange}>
               <option value="all">All Statuses</option>
-              <option value="draft">Draft</option>
-              <option value="pending">Pending Approval</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
+              <option value="Draft">Draft</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
             </select>
           </div>
 
@@ -101,7 +80,6 @@ const DocumentList = () => {
           <div className="header-cell">Status</div>
           <div className="header-cell">Last Modified</div>
           <div className="header-cell">Version</div>
-          <div className="header-cell actions">Actions</div>
         </div>
 
         {filteredDocuments.length > 0 ? (
@@ -110,52 +88,30 @@ const DocumentList = () => {
               <div className="table-cell">
                 <FaFileAlt className="file-icon" />
                 <Link to={`/documents/${doc.id}`} className="document-name">
-                  {doc.name || 'Untitled Document'}
+                  {doc.name}
                 </Link>
               </div>
               <div className="table-cell">
                 <span className={`file-type ${doc.type}`}>
-                  {doc.type?.toUpperCase() || 'N/A'}
+                  {doc.type.toUpperCase()}
                 </span>
               </div>
               <div className="table-cell">
-                <span className={`status-badge ${doc.status}`}>
-                  {doc.status || 'Unknown'}
+                <span className={`status-badge ${doc.status.toLowerCase().replace(' ', '-')}`}>
+                  {doc.status}
                 </span>
               </div>
               <div className="table-cell">
-                {doc.modifiedDate || 'N/A'}
+                {new Date(doc.modifiedAt).toLocaleDateString()}
               </div>
               <div className="table-cell">
-                {doc.version ? `v${doc.version}` : 'N/A'}
-              </div>
-              <div className="table-cell actions">
-                <Link 
-                  to={`/documents/${doc.id}/download`} 
-                  className="action-button download"
-                >
-                  <FaDownload />
-                </Link>
-                <Link 
-                  to={`/documents/${doc.id}/history`} 
-                  className="action-button history"
-                >
-                  <FaHistory />
-                </Link>
-                <Link 
-                  to={`/documents/${doc.id}/edit`} 
-                  className="action-button edit"
-                >
-                  <FaEdit />
-                </Link>
+                v{doc.version}
               </div>
             </div>
           ))
         ) : (
           <div className="no-documents">
-            {documentData.length === 0 ? 
-              'No documents available' : 
-              'No documents found matching your criteria'}
+            No documents found matching your criteria
           </div>
         )}
       </div>

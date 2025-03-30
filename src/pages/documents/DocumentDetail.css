@@ -1,0 +1,51 @@
+/* src/pages/documents/DocumentDetail.css */
+.document-detail {
+    padding: 1.5rem;
+  }
+  
+  .document-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .document-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .document-meta {
+    display: flex;
+    gap: 1rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  
+  .document-content {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .document-viewer-container {
+    flex: 1;
+    min-height: 70vh;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .document-sidebar {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  @media (max-width: 1024px) {
+    .document-content {
+      flex-direction: column;
+    }
+    
+    .document-sidebar {
+      width: 100%;
+    }
+  }
