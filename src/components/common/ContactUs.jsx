@@ -23,51 +23,28 @@ const ContactUs = () => {
   
   // Get reCAPTCHA site key from environment variables
   const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-  
 
-
-  
   // Contact info
   const contactInfo = [
     {
       icon: <FiMail className="text-blue-500 text-xl" />,
       title: 'Email Us',
-      description: 'support@dms-solutions.com',
-      href: 'mailto:support@dms-solutions.com',
+      description: 'support@prolianceltd.com',
+      href: 'mailto:support@prolianceltd.com',
     },
     {
       icon: <FiPhone className="text-blue-500 text-xl" />,
       title: 'Call Us',
-      description: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
+      description: '+234 (0) 123 456 7890',
+      href: 'tel:+23401234567890',
     },
     {
       icon: <FiMapPin className="text-blue-500 text-xl" />,
       title: 'Visit Us',
-      description: '123 Tech Park, San Francisco, CA 94107',
+      description: 'Plot 5 Owule Ojuan Street, off Peter Odili Road, Trans Amadi, Port Harcourt, Rivers',
       href: 'https://maps.google.com',
-    },
-  
-    {
-      icon: <FiMail className="text-blue-500 text-xl" />,
-      title: 'Email Us',
-      description: 'support@dms-solutions.com',
-      href: 'mailto:support@dms-solutions.com',
-    },
-    {
-      icon: <FiPhone className="text-blue-500 text-xl" />,
-      title: 'Call Us',
-      description: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
-    },
-    {
-      icon: <FiMapPin className="text-blue-500 text-xl" />,
-      title: 'Visit Us',
-      description: '123 Tech Park, San Francisco, CA 94107',
-      href: 'https://maps.google.com',
-    },
+    }
   ];
-  
 
   // Validate form
   const validateForm = () => {
@@ -425,8 +402,8 @@ const ContactUs = () => {
         </motion.div>
       </div>
       
-      {/* Map Section */}
-      <motion.div 
+    {/* Map Section */}
+    <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
@@ -437,8 +414,8 @@ const ContactUs = () => {
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-50">
             <div className="text-center p-6">
               <FiMapPin className="mx-auto text-blue-500 text-4xl mb-4" />
-              <h3 className="text-xl font-medium text-gray-900 mb-2">DMS Solutions Headquarters</h3>
-              <p className="text-gray-600">123 Tech Park, San Francisco, CA 94107</p>
+              <h3 className="text-xl font-medium text-gray-900 mb-2">Proliance Limited Headquarters</h3>
+              <p className="text-gray-600">Plot 5 Owule Ojuan Street, off Peter Odili Road,<br />Trans Amadi, Port Harcourt, Rivers State, Nigeria</p>
               <a 
                 href="https://maps.google.com" 
                 target="_blank" 

@@ -6,7 +6,7 @@ const Terms = () => {
   const sections = [
     {
       title: "1. Acceptance of Terms",
-      content: "By accessing or using the Document Management System (DMS) provided by DMS Solutions, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions, you may not access or use our services."
+      content: "By accessing or using the Document Management System (DMS) provided by Proliance Limited, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions, you may not access or use our services."
     },
     {
       title: "2. Description of Service",
@@ -24,7 +24,7 @@ const Terms = () => {
     },
     {
       title: "4. Intellectual Property",
-      content: "All intellectual property rights in the Service and its original content are owned by DMS Solutions. Your documents remain your property, and we claim no intellectual property rights over your materials."
+      content: "All intellectual property rights in the Service and its original content are owned by Proliance Limited. Your documents remain your property, and we claim no intellectual property rights over your materials."
     },
     {
       title: "5. Data Retention",
@@ -32,11 +32,11 @@ const Terms = () => {
     },
     {
       title: "6. Limitation of Liability",
-      content: "DMS Solutions shall not be liable for any indirect, incidental, special, consequential or punitive damages resulting from your use of or inability to use the Service."
+      content: "Proliance Limited shall not be liable for any indirect, incidental, special, consequential or punitive damages resulting from your use of or inability to use the Service."
     },
     {
       title: "7. Governing Law",
-      content: "These Terms shall be governed by the laws of the State of California without regard to its conflict of law provisions."
+      content: "These Terms shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria."
     },
     {
       title: "8. Changes to Terms",
@@ -114,7 +114,7 @@ const Terms = () => {
             <div className="mt-2 text-sm text-blue-700">
               <p>
                 Contact our legal team at{' '}
-                <a href="mailto:legal@dms-solutions.com" className="font-medium underline">
+                <a href="mailto:support@prolianceltd.com" className="font-medium underline">
                   support@prolianceltd.com
                 </a>{' '}
                 for any questions about these Terms of Service.

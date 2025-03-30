@@ -49,6 +49,7 @@ import Cooky from './components/common/Cooky'
 import Webinars from './components/common/Webinars'
 import Compliance from './components/common/Compliance'
 import Careers from './components/common/Careers'
+import Features from './components/common/Features'
 
 import { DocumentProvider } from './contexts/DocumentContext';
 import { ScheduleProvider } from './contexts/ScheduleContext';
@@ -106,6 +107,7 @@ const App = () => {
               <Route path="/webinars" element={<Webinars />} />
               <Route path="/cookies" element={<Cooky />} />
               <Route path="/compliance" element={<Compliance />} />
+              <Route path="/features" element={<Features />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
             </Route>
           </Route>
