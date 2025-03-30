@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiBell, FiSearch, FiUser, FiHome } from 'react-icons/fi';
+import './Topbar.css';
 
 const Topbar = () => {
   // const { currentUser } = useAuth();
