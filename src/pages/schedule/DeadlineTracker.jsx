@@ -13,21 +13,46 @@ const DeadlineTracker = () => {
 
   useEffect(() => {
     const loadDeadlines = async () => {
-      if (currentProject) {
+      if (!currentProject) {
+        console.warn("No current project selected");
+        setLoading(false);
+        return;
+      }
+
+      if (!fetchProjectDeadlines) {
+        console.error("fetchProjectDeadlines function is undefined");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        console.log("Fetching deadlines for project:", currentProject.id);
         const items = await fetchProjectDeadlines(currentProject.id);
-        setDeadlines(items);
+        setDeadlines(items || []); // Ensure it's always an array
+      } catch (error) {
+        console.error("Failed to fetch deadlines:", error);
+      } finally {
         setLoading(false);
       }
     };
+
     loadDeadlines();
   }, [currentProject, fetchProjectDeadlines]);
 
   const getStatusCounts = () => {
-    const overdue = deadlines.filter(d => new Date(d.dueDate) < new Date() && !d.completed).length;
-    const upcoming = deadlines.filter(d => new Date(d.dueDate) >= new Date() && !d.completed).length;
+    if (!Array.isArray(deadlines)) return { overdue: 0, upcoming: 0, completed: 0 };
+
+    const now = new Date();
+    const overdue = deadlines.filter(d => new Date(d.dueDate) < now && !d.completed).length;
+    const upcoming = deadlines.filter(d => new Date(d.dueDate) >= now && !d.completed).length;
     const completed = deadlines.filter(d => d.completed).length;
+
     return { overdue, upcoming, completed };
   };
+
+  console.log("Current Project:", currentProject);
+  console.log("Deadlines:", deadlines);
+  console.log("Loading state:", loading);
 
   const { overdue, upcoming, completed } = getStatusCounts();
 
