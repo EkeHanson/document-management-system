@@ -36,7 +36,7 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <div className="dashboard-header">
         {/* <h1>Welcome back, {user?.name || 'User'}</h1> */}
-        <h1>Welcome back, {'User'}</h1>
+        <h1>Welcome back, {'User'} </h1>
         <div className="header-actions">
           <div className="search-bar">
             <FaSearch className="search-icon" />
