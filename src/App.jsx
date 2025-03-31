@@ -10,6 +10,7 @@ import PublicLayout from './components/common/PublicLayout'; // New public layou
 
 // Import all your page components
 import Login from './pages/auth/Login';
+import RequestAccess from './pages/auth/RequestAccess';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import Dashboard from './pages/dashboard/Dashboard';
 import Overview from './pages/dashboard/Overview';
@@ -99,7 +100,8 @@ const App = () => {
           <Route element={<PublicLayout />}>
             <Route element={<PublicRoute />}>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login  />} />
+              <Route path="/request-access" element={<RequestAccess  />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/privacy" element={<Privacy />} />
@@ -121,14 +123,6 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/overview" element={<Overview />} />
               <Route path="/notifications" element={<Notifications />} />
-
-              {/* Document Management */}
-              {/* <Route path="/documents">
-                <Route index element={<DocumentList />} />
-                <Route path="upload" element={<UploadDocument />} />
-                <Route path=":documentId" element={<DocumentDetail />} />
-                <Route path="compare/:documentId/:version1/:version2" element={<VersionCompare />} />
-              </Route> */}
 
             <Route path="/documents">
               <Route index element={<DocumentList />} />

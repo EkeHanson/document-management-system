@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+
+import {useAuthContext} from '../../contexts/AuthContext'
+
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../assets/images/christmas_2012_new_4009.jpg';
+//import logo from '../../assets/images/proliance.png';
 import './Auth.css';
 
 const Login = () => {
@@ -11,7 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
