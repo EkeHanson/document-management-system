@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import logo from '../../assets/images/proliance.png'
+import React, { useState, useEffect, useRef } from 'react';
+import logo from '../../assets/images/proliance.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   FaRegFileAlt, 
@@ -27,10 +27,34 @@ const Navbar = ({ onSidebarToggle, isSidebarCollapsed }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activePath, setActivePath] = useState('');
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     setActivePath(location.pathname);
   }, [location]);
+
+  // Handle click outside the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        // Check if the click was on the profile button
+        const profileButton = document.querySelector('.profile-btn');
+        if (profileButton && !profileButton.contains(event.target)) {
+          setIsProfileOpen(false);
+        }
+      }
+    };
+
+    if (isProfileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileOpen]);
 
   const handleLogout = () => {
     // logout();
@@ -71,10 +95,6 @@ const Navbar = ({ onSidebarToggle, isSidebarCollapsed }) => {
         </button>
 
         {/* Brand Logo */}
-        {/* <Link to="/" className="navbar-brand">
-          <FaRegFileAlt className="brand-icon" />
-          <span className="brand-text">EngineeringDMS</span>
-        </Link> */}
         <Link to="/" className="navbar-brand">
           <img src={logo} alt="Company Logo" className="brand-logo" />
           <span className="brand-text">EngineeringDMS</span>
@@ -148,7 +168,7 @@ const Navbar = ({ onSidebarToggle, isSidebarCollapsed }) => {
             </button>
 
             {isProfileOpen && (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" ref={dropdownRef}>
                 <div className="dropdown-header">
                   <FaUserCircle className="user-icon" />
                   <div>
