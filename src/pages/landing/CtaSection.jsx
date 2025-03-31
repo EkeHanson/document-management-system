@@ -26,9 +26,9 @@ const CtaSection = () => {
               Contact Sales
             </button>
           </div>
-          <div className="cta-note">
+          {/* <div className="cta-note">
             <span>No credit card required • 14-day trial • Cancel anytime</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
