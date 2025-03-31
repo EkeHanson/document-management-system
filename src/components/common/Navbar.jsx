@@ -86,13 +86,13 @@ const Navbar = ({ onSidebarToggle, isSidebarCollapsed }) => {
     <nav className="navbar">
       <div className="navbar-container">
         {/* Sidebar Toggle Button */}
-        <button 
+        {/* <button 
           className="sidebar-toggle"
           onClick={onSidebarToggle}
           aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isSidebarCollapsed ? <FaBars /> : <FaTimes />}
-        </button>
+        </button> */}
 
         {/* Brand Logo */}
         <Link to="/" className="navbar-brand">
@@ -101,6 +101,7 @@ const Navbar = ({ onSidebarToggle, isSidebarCollapsed }) => {
         </Link>
 
         {/* Mobile Menu Toggle */}
+
         <button 
           className="mobile-menu-toggle"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
